@@ -31,7 +31,24 @@ class Cell
   end
 
   # method to return status of cell
-  def render
-
+  def render(show*)
+    # show_ship = false uinless true given
+    show_ship = false
+    if show
+      show_ship = true
+    end
+    if !fired_upon? && empty
+      "."
+    elsif !fired_upon? && !empty && !show_ship
+      "."
+    elsif !fired_upon? && !empty && show_ship
+      "S"
+    elsif fired_upon? && empty
+      "M"
+    elsif fired_upon? && !empty && !ship.sunk
+      "H"
+    else fired_upon? && !empty && ship.sunk
+      "X"
+    end
   end
 end
