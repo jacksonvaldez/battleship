@@ -28,15 +28,18 @@ class Board
     end
   end
 
-  # def valid_coordinate?(coordinate)
-  #   @cells.times do |i|
-  #     if coordinate == @cells[i].coordinate
-  #       return true
-  #     else
-  #       return false
-  #     end
-  #   end
-  # end
+
+  def valid_coordinate?(coordinate)
+    @cells.length.times do |i|
+      if coordinate == @cells[i].coordinate
+        return true
+      end
+    end
+    return false
+  end
+
+
+
 
 
 

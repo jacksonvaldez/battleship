@@ -3,8 +3,6 @@ require './lib/board'
 describe Board do
 
   before(:each) do
-    @ship = Ship.new('Cruiser', 3)
-    @cell = Cell.new('C3')
     @board = Board.new(5, 3)
   end
 
@@ -25,18 +23,22 @@ describe Board do
   end
 
 
-  # describe '#valid_coordinate?' do
-  #
-  #   it 'returns true if coordinate is valid' do
-  #
-  #   end
-  #
-  #   it 'returns false if coordinate is invalid' do
-  #
-  #   end
-  #
-  #
-  # end
+  describe '#valid_coordinate?' do
+
+    it 'returns a boolean' do
+      expect(@board.valid_coordinate?('B3')).to be_a(TrueClass || FalseClass)
+    end
+
+    it 'returns true if coordinate is valid' do
+      expect(@board.valid_coordinate?('B3')).to eq(true)
+    end
+
+    it 'returns false if coordinate is invalid' do
+      expect(@board.valid_coordinate?('J3')).to eq(false)
+    end
+
+
+  end
 
 
 
