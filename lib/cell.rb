@@ -41,18 +41,14 @@ class Cell
   end
 
   # method to return status of cell
-  def render(*show)
-    # show_ship = false uinless true given
-    if show != []
-      @show_ship = show[0]
-    end
-
+  def render(*show) # if no argument given, defaulted to nil
+    
     # run tests to determine what to display
     if !fired_upon? && empty?
       "." # empty
-    elsif !fired_upon? && !empty? && !show_ship?
+    elsif !fired_upon? && !empty? && show[0] == nil
       "." # ship exists, but don't show it
-    elsif !fired_upon? && !empty? && show_ship?
+    elsif !fired_upon? && !empty? && show[0] == true
       "S" # Ship
     elsif fired_upon? && empty?
       "M" # Missed
@@ -61,6 +57,5 @@ class Cell
     else fired_upon? && !empty? && ship.sunk?
       "X" # Sunken Ship
     end
-    @show_ship = false
   end
 end
