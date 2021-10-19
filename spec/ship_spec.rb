@@ -31,5 +31,14 @@ describe Ship do
   end
 
 
+  describe '#hit' do
+    it 'removes 1 from health' do
+      @ship.hit
+      expect(@ship.health).to eq(@ship.length - 1)
+    end
+  end
+
+
+
 
 end
