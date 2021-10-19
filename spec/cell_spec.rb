@@ -19,22 +19,25 @@ describe Cell do
     expect(@cell.ship).to eq(nil)
   end
 
+  it 'initializes with display = "."' do
+    expect(@cell.display).to eq(".")
+  end
+
   describe ' #place_ship' do
     it 'adds ship object' do
       @cell.place_ship(@ship)
       expect(@cell.ship).to be_a Ship
       expect(@cell.ship).to eq(@ship)
     end
-
-
   end
 
   describe ' #empty?' do
     it 'returns true when nil present' do
-
+      expect(@cell.empty?).to eq(true)
     end
     it 'returns false when ship present' do
-
+      cell.place_ship(@ship)
+      expect(@cell.empty?).to eq(false)
     end
   end
 
