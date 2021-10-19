@@ -31,11 +31,11 @@ class Cell
   end
 
   # method to return status of cell
-  def render(show*)
+  def render(*show)
     # show_ship = false uinless true given
     show_ship = false
-    if show
-      show_ship = true
+    if show != []
+      show_ship = show[0]
     end
     if !fired_upon? && empty
       "."
