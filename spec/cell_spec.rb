@@ -4,7 +4,7 @@ require './lib/ship'
 describe Cell do
   before(:each) do
     @cell = Cell.new("B4")
-    @ship = Ship.new()
+    @ship = Ship.new("Cruiser", 3)
   end
 
   it 'is a cell' do
