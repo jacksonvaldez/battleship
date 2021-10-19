@@ -13,6 +13,7 @@ class Cell
   # method to add ship object - return ship object or nil
   def place_ship(ship)
     @ship = ship
+    return nil
   end
 
   # method to check if cell is empty
@@ -31,6 +32,7 @@ class Cell
     if !empty?
       ship.hit
     end
+    return nil
   end
 
   # method to return status of cell
