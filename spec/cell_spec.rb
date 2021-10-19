@@ -23,6 +23,10 @@ describe Cell do
     expect(@cell.fired_upon).to eq(false)
   end
 
+  it 'initializes with show_ship = false' do
+    expect(@cell.show_ship).to eq(false)
+  end
+
   describe ' #place_ship' do
     it 'adds ship object' do
       @cell.place_ship(@ship)
@@ -46,6 +50,12 @@ describe Cell do
       expect(@cell.fired_upon).to eq(false)
       @cell.fire_upon
       expect(@cell.fired_upon).to eq(true)
+    end
+  end
+
+  describe ' #show_ship?' do
+    it 'returns show_ship' do
+      expect(@cell.show_ship?).to eq(false)
     end
   end
 
