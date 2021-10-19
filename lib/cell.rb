@@ -25,6 +25,11 @@ class Cell
 
   end
 
+  #method to fire upon cell
+  def fire_upon
+
+  end
+
   # method to return status of cell
   def render
 

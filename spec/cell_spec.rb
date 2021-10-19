@@ -41,12 +41,27 @@ describe Cell do
     end
   end
 
+  describe ' #fire_upon' do
+    it 'updates display to M if no ship present' do
+      expect(@cell.display).to eq(".")
+      @cell.fire_upon
+      expect(@cell.display).to eq("M")
+    end
+    it 'updates display to H if ship present' do
+      expect(@cell.display).to eq(".")
+      @cell.place_ship(@ship)
+      @cell.fire_upon
+      expect(@cell.display).to eq("H")
+    end
+  end
+
   describe ' #fired_upon' do
     it 'returns false when display is "."' do
-
+      expect(@cell.display).to eq(false)
     end
     it 'returns true when display is anything but "."' do
-
+      @cell.fire_upon
+      expect(@cell.fired_upon).to eq(true)
     end
   end
 
