@@ -28,6 +28,9 @@ class Cell
   #method to fire upon cell
   def fire_upon
     @fired_upon = true
+    if !empty?
+      ship.hit
+    end
   end
 
   # method to return status of cell
@@ -37,17 +40,17 @@ class Cell
     if show != []
       show_ship = show[0]
     end
-    if !fired_upon? && empty
+    if !fired_upon? && empty?
       "."
-    elsif !fired_upon? && !empty && !show_ship
+    elsif !fired_upon? && !empty? && !show_ship
       "."
-    elsif !fired_upon? && !empty && show_ship
+    elsif !fired_upon? && !empty? && show_ship
       "S"
-    elsif fired_upon? && empty
+    elsif fired_upon? && empty?
       "M"
-    elsif fired_upon? && !empty && !ship.sunk
+    elsif fired_upon? && !empty? && !ship.sunk?
       "H"
-    else fired_upon? && !empty && ship.sunk
+    else fired_upon? && !empty? && ship.sunk?
       "X"
     end
   end
