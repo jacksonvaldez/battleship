@@ -15,4 +15,21 @@ describe Ship do
   end
 
 
+  describe '#sunk?' do
+    it 'returns appropriate boolean' do
+      5.times do
+        @ship.hit
+      end
+      expect(@ship.sunk?).to eq(true)
+    end
+    it 'returns appropriate boolean' do
+      2.times do
+        @ship.hit
+      end
+      expect(@ship.sunk?).to eq(false)
+    end
+  end
+
+
+
 end
