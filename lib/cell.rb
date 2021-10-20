@@ -41,7 +41,7 @@ class Cell
     # run tests to determine what to display
     if !fired_upon? && empty?
       "." # empty
-    elsif !fired_upon? && !empty? && show[0] == nil
+    elsif !fired_upon? && !empty? && ((show[0] == nil) || (show[0] == false))
       "." # ship exists, but don't show it
     elsif !fired_upon? && !empty? && show[0] == true
       "S" # Ship
