@@ -39,6 +39,7 @@ describe Board do
     @board = Board.new(5, 3)
   end
 
+
   describe '#initialize' do
     it 'has dimensions' do
       expect(@board.height).to eq(5)
@@ -66,7 +67,6 @@ describe Board do
   end
 
 
-
   describe '#valid_placement?' do
     it 'returns true if placement is valid' do
       expect(@board.valid_placement?(@cruiser, ['A1', 'A2', 'A3'])).to eq(true)
@@ -79,10 +79,5 @@ describe Board do
       expect(@board.valid_placement?(@cruiser, ["A1", "A2", "A4"])).to eq(false)
       expect(@board.valid_placement?(@cruiser, ["A1", "B1", "D1"])).to eq(false)
     end
-
-
   end
-
-
-
 end
