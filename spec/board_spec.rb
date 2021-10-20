@@ -25,7 +25,6 @@ describe '#is_sequential?' do
   it 'returns false if the array given is not in sequential' do
     expect(is_sequential?([5, 8, 6, 7, 10])).to eq(false)
     expect(is_sequential?(['D', 'C', 'B', 'Z'])).to eq(false)
-    expect(is_sequential?([1, 5, 10])).to eq(false)
   end
 end
 
@@ -40,9 +39,6 @@ describe Board do
     @board = Board.new(5, 3)
   end
 
-
-
-
   describe '#initialize' do
     it 'has dimensions' do
       expect(@board.height).to eq(5)
@@ -51,6 +47,10 @@ describe Board do
 
     it 'has correct array length for @board.cells' do
       expect(@board.cells.length).to eq(15) # length * width (In this case 5 * 3)
+    end
+
+    it 'cell_coordinates initializes will correct cell coordinates' do
+      expect(@board.cell_coordinates).to eq(%w[A1 B1 C1 D1 E1 A2 B2 C2 D2 E2 A3 B3 C3 D3 E3])
     end
   end
 
