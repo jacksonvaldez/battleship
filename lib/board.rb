@@ -7,24 +7,15 @@ public # Allows the methods below to be accessed inside the Board class definiti
 
 # Testing if every element in an array is the same. [1, 2, 3] --> false,    ['hi', 'hi', 'hi'] --> true
 def everything_same?(array)
-  array_new = array.find_all do |element|
+  array.all? do |element|
     element == array[0]
   end
-  array_new.length == array.length
 end
-
-
-
 
 # Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
 def is_sequential?(array)
-  array = array.map do |element|
-    element.ord
-  end
-  min = array.sort[0]
-  max = min + array.length - 1
-  correct = (min..max).to_a
-  array.sort == correct
+  new_array = array.sort
+  (new_array.first..new_array.last).to_a == new_array
 end
 
 
