@@ -46,7 +46,14 @@ class Board
     array_new.length == array.length
   end
 
+
+
   def is_sequential?(array)
+    if array[0].class == String
+      array = array.map do |element|
+        element.ord
+      end
+    end
     min = array.sort[0]
     max = min + array.length - 1
     correct = (min..max).to_a
@@ -78,7 +85,18 @@ class Board
 
 
     if self.everything_same?(letter_array)
-      if
+      if self.is_sequential?(number_array)
+        return true
+      else
+        return false
+      end
+    else self.everything_same?(number_array)
+      if self.is_sequential?(letter_array)
+        return true
+      else
+        return false
+      end
+    end
 
 
 
@@ -100,10 +118,6 @@ class Board
     #     return true
     #   end
     # end
-
-
-
-    return false
   end
 
 

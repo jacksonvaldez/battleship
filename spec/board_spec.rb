@@ -45,15 +45,28 @@ describe Board do
   end
 
 
+  describe '#is_sequential?' do
+    it 'returns true if the array given is in sequential' do
+      expect(@board.is_sequential?([5, 8, 6, 7])).to eq(true)
+      expect(@board.is_sequential?(['D', 'C', 'B'])).to eq(true)
+    end
+    it 'returns false if the array given is not in sequential' do
+      expect(@board.is_sequential?([5, 8, 6, 7, 10])).to eq(false)
+      expect(@board.is_sequential?(['D', 'C', 'B', 'Z'])).to eq(false)
+    end
+
+  end
+
+
 
   describe '#valid_placement?' do
-    # it 'returns true if placement is valid' do
-    #   expect(@board.valid_placement?(@cruiser, ['A1', 'A2', 'A3'])).to eq(true)
-    # end
-    #
-    # it 'returns false if placement is invalid' do
-    #   expect(@board.valid_placement?(@cruiser, ["C3", "B2", "C3"])).to eq(false)
-    # end
+    it 'returns true if placement is valid' do
+      expect(@board.valid_placement?(@cruiser, ['A1', 'A2', 'A3'])).to eq(true)
+    end
+
+    it 'returns false if placement is invalid' do
+      expect(@board.valid_placement?(@cruiser, ["C3", "B2", "C3"])).to eq(false)
+    end
 
 
   end
