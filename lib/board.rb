@@ -1,5 +1,35 @@
 require './lib/cell'
 
+
+
+
+public # Allows the methods below to be accessed inside the Board class definition
+
+# Testing if every element in an array is the same. [1, 2, 3] --> false,    ['hi', 'hi', 'hi'] --> true
+def everything_same?(array)
+  array_new = array.find_all do |element|
+    element == array[0]
+  end
+  array_new.length == array.length
+end
+
+
+
+
+# Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
+def is_sequential?(array)
+  array = array.map do |element|
+    element.ord
+  end
+  min = array.sort[0]
+  max = min + array.length - 1
+  correct = (min..max).to_a
+  array.sort == correct
+end
+
+
+
+
 class Board
 
   attr_reader :height, :width, :cells
@@ -21,6 +51,8 @@ class Board
     # E . . .
 
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+
+    # Generates an array of cells for the board
     @width.times do |w|
       @height.times do |h|
         @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
@@ -28,10 +60,10 @@ class Board
     end
   end
 
-
+  # Tests if a coordinate is a valid placement on the board
   def valid_coordinate?(coordinate)
-    @cells.length.times do |i|
-      if coordinate == @cells[i].coordinate
+    @cells.each do |cell|
+      if coordinate == cell.coordinate
         return true
       end
     end
@@ -39,69 +71,49 @@ class Board
   end
 
 
-  def everything_same?(array)
-    array_new = array.find_all do |element|
-      element == array[0]
-    end
-    array_new.length == array.length
-  end
 
 
-
-  def is_sequential?(array)
-    if array[0].class == String
-      array = array.map do |element|
-        element.ord
-      end
-    end
-    min = array.sort[0]
-    max = min + array.length - 1
-    correct = (min..max).to_a
-    array.sort == correct
-  end
-
-
-
-
+  # Tests if a ship placement is possible on the board
   def valid_placement?(ship, coordinates)
 
-    # if the length of the ship object is not the same as the length of the coordinates_array array, return false for the whole method.
-    if ship.length != coordinates.length
-      return false
-    end
 
-    coordinates.each do |coordinate|
-      if self.valid_coordinate?(coordinate) == false
-        return false
+    def parse_letters(strings)
+      strings.map do |element|
+        element[0] # Each element is a string. Its returning a new array for the FIRST character of each string. ['A1', A2', 'A3'] --> ['A', 'B', 'C']
       end
     end
 
-    letter_array = coordinates.map do |coordinate|
-      coordinate[0]
-    end
-    number_array = coordinates.map do |coordinate|
-      coordinate[1]
+
+    def parse_numbers(strings)
+      strings.map do |element|
+        element[1] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
+      end
     end
 
 
-    if self.everything_same?(letter_array)
-      if self.is_sequential?(number_array)
-        return true
+    if ship.length == coordinates.length # Testing if the ship length is the same length as the coordinates given
+      coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
+        if !self.valid_coordinate?(coordinate)
+          return false
+        end
+      end
+      if self.everything_same?(parse_letters(coordinates)) # If all the coordinates start with the same letter
+        if self.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential
+          return true # Add code here that tests for overlapping ships
+        else
+          return false
+        end
+      elsif self.everything_same?(parse_numbers(coordinates)) # If all the coordinates end with the same number
+        if self.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential
+          return true # Add code here that tests for overlapping ships
+        else
+          return false
+        end
       else
         return false
       end
-    elsif self.everything_same?(number_array)
-      if self.is_sequential?(letter_array)
-        return true
-      else
-        return false
-      end
-    else
-      return false
     end
+
+
   end
-
-
-
-
 end

@@ -1,5 +1,37 @@
 require './lib/board'
 
+
+
+
+
+describe '#everything_same?' do
+  it 'returns true if the array given has elements that are all equal to each other' do
+    expect(everything_same?([1, 1, 1, 1, 1])).to eq(true)
+    expect(everything_same?(['A', 'A', 'A', 'A'])).to eq(true)
+  end
+  it 'returns false if the array given has elements that are not all equal to each other' do
+    expect(everything_same?([1, 2, 3, 4, 5])).to eq(false)
+    expect(everything_same?(['A', 'B', 'C', 'D'])).to eq(false)
+  end
+end
+
+
+
+describe '#is_sequential?' do
+  it 'returns true if the array given is in sequential' do
+    expect(is_sequential?([5, 8, 6, 7])).to eq(true)
+    expect(is_sequential?(['D', 'C', 'B'])).to eq(true)
+  end
+  it 'returns false if the array given is not in sequential' do
+    expect(is_sequential?([5, 8, 6, 7, 10])).to eq(false)
+    expect(is_sequential?(['D', 'C', 'B', 'Z'])).to eq(false)
+  end
+end
+
+
+
+
+
 describe Board do
 
   before(:each) do
@@ -33,36 +65,12 @@ describe Board do
   end
 
 
-  describe '#everything_same?' do
-    it 'returns true if the array given has elements that are all equal to each other' do
-      expect(@board.everything_same?([1, 1, 1, 1, 1])).to eq(true)
-      expect(@board.everything_same?(['A', 'A', 'A', 'A'])).to eq(true)
-    end
-    it 'returns false if the array given has elements that are not all equal to each other' do
-      expect(@board.everything_same?([1, 2, 3, 4, 5])).to eq(false)
-      expect(@board.everything_same?(['A', 'B', 'C', 'D'])).to eq(false)
-    end
-  end
-
-
-  describe '#is_sequential?' do
-    it 'returns true if the array given is in sequential' do
-      expect(@board.is_sequential?([5, 8, 6, 7])).to eq(true)
-      expect(@board.is_sequential?(['D', 'C', 'B'])).to eq(true)
-    end
-    it 'returns false if the array given is not in sequential' do
-      expect(@board.is_sequential?([5, 8, 6, 7, 10])).to eq(false)
-      expect(@board.is_sequential?(['D', 'C', 'B', 'Z'])).to eq(false)
-    end
-
-  end
-
-
 
   describe '#valid_placement?' do
     it 'returns true if placement is valid' do
       expect(@board.valid_placement?(@cruiser, ['A1', 'A2', 'A3'])).to eq(true)
       expect(@board.valid_placement?(@cruiser, ['D1', 'C1', 'B1'])).to eq(true)
+      expect(@board.valid_placement?(@cruiser, ['B3', 'B1', 'B2'])).to eq(true)
     end
 
     it 'returns false if placement is invalid' do
