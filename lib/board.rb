@@ -23,7 +23,7 @@ class Board
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
     @width.times do |w|
       @height.times do |h|
-        @cells.push(Cell.new("#{alphabet[w]}#{h + 1}"))
+        @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
       end
     end
   end
@@ -90,34 +90,15 @@ class Board
       else
         return false
       end
-    else self.everything_same?(number_array)
+    elsif self.everything_same?(number_array)
       if self.is_sequential?(letter_array)
         return true
       else
         return false
       end
+    else
+      return false
     end
-
-
-
-
-
-
-
-
-
-    # Pseudocode
-    # if 'everything in letter_array is the same'
-    #   if 'the number_array is in sequential order'
-    #     return true
-    #   end
-    # end
-    #
-    # if 'everything in the number_array is the same'
-    #   if 'the letter_array is an alphabetical order'
-    #     return true
-    #   end
-    # end
   end
 
 
