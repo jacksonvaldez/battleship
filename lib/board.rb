@@ -49,24 +49,28 @@ class Board
 
 
 
-  def valid_placement?(ship, coordinates_array)
+  def valid_placement?(ship, coordinates)
 
     # if the length of the ship object is not the same as the length of the coordinates_array array, return false for the whole method.
-    if ship.length != coordinates_array.length
+    if ship.length != coordinates.length
       return false
     end
 
-    coordinates_array.each do |coordinate|
+    coordinates.each do |coordinate|
       if self.valid_coordinate?(coordinate) == false
         return false
       end
     end
 
+    letter_array = coordinates.map do |coordinate|
+      coordinate[0]
+    end
+    number_array = coordinates.map do |coordinate|
+      coordinate[1]
+    end
 
 
-
-
-
+    if
 
 
 
