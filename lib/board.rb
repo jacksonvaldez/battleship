@@ -46,6 +46,13 @@ class Board
     array_new.length == array.length
   end
 
+  def is_sequential?(array)
+    min = array.sort[0]
+    max = min + array.length - 1
+    correct = (min..max).to_a
+    array.sort == correct
+  end
+
 
 
 
@@ -70,7 +77,8 @@ class Board
     end
 
 
-    if
+    if self.everything_same?(letter_array)
+      if
 
 
 
@@ -81,17 +89,17 @@ class Board
 
 
     # Pseudocode
-    if 'everything in letter_array is the same'
-      if 'the number_array is in sequential order'
-        return true
-      end
-    end
-
-    if 'everything in the number_array is the same'
-      if 'the letter_array is an alphabetical order'
-        return true
-      end
-    end
+    # if 'everything in letter_array is the same'
+    #   if 'the number_array is in sequential order'
+    #     return true
+    #   end
+    # end
+    #
+    # if 'everything in the number_array is the same'
+    #   if 'the letter_array is an alphabetical order'
+    #     return true
+    #   end
+    # end
 
 
 
