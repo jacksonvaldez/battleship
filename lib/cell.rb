@@ -1,14 +1,13 @@
 require './lib/ship'
 
 class Cell
-  attr_reader :coordinate, :fired_upon, :ship, :show_ship
+  attr_reader :coordinate, :fired_upon, :ship
 
   #initialize cell with coordinate name and empty ship
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
     @fired_upon = false
-    @show_ship = false
   end
 
   # method to add ship object - return ship object or nil
@@ -27,10 +26,6 @@ class Cell
     @fired_upon
   end
 
-  #
-  def show_ship?
-    @show_ship
-  end
   #method to fire upon cell
   def fire_upon
     @fired_upon = true
@@ -42,7 +37,7 @@ class Cell
 
   # method to return status of cell
   def render(*show) # if no argument given, defaulted to nil
-    
+
     # run tests to determine what to display
     if !fired_upon? && empty?
       "." # empty
