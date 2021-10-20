@@ -25,6 +25,7 @@ describe '#is_sequential?' do
   it 'returns false if the array given is not in sequential' do
     expect(is_sequential?([5, 8, 6, 7, 10])).to eq(false)
     expect(is_sequential?(['D', 'C', 'B', 'Z'])).to eq(false)
+    expect(is_sequential?([1, 5, 10])).to eq(false)
   end
 end
 

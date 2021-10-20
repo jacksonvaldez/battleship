@@ -14,8 +14,8 @@ end
 
 # Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
 def is_sequential?(array)
-  new_array = array.sort
-  (new_array.first..new_array.last).to_a == new_array
+  array.sort!
+  (array.first..array.last).to_a == array
 end
 
 
@@ -23,12 +23,13 @@ end
 
 class Board
 
-  attr_reader :height, :width, :cells
+  attr_reader :height, :width, :cells, :cell_coordinates
 
   def initialize(height, width)
     @height = height
     @width = width
     @cells = []
+    @cell_coordinates = [] #An array of coordinates(strings) for each cell object
 
 
     # Creates an array of cell objects based on height and width
@@ -47,19 +48,16 @@ class Board
     @width.times do |w|
       @height.times do |h|
         @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
+        @cell_coordinates.push("#{alphabet[h]}#{w + 1}")
       end
     end
   end
 
   # Tests if a coordinate is a valid placement on the board
   def valid_coordinate?(coordinate)
-    @cells.each do |cell|
-      if coordinate == cell.coordinate
-        return true
-      end
-    end
-    return false
+    @cell_coordinates.include?(coordinate)
   end
+
 
 
 
