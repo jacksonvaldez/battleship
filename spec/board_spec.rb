@@ -112,13 +112,13 @@ describe Board do
       expect(@board.render).to eq("  1 2 3 \nA . . . \nB . . . \nC . . . \nD . . . \nE . . . \n")
     end
 
-    xit 'renders correct board of different shape' do
+    it 'renders correct board of different shape' do
       board2 = Board.new(4, 5)
       board2.place(@cruiser, ["A1", "A2", "A3"])
-      expect(board2.render(true)).to eq("  1 2 3 \nA S S S \nB . . . \nC . . . \nD . . . \nE . . . \n")
+      expect(board2.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \nE . . . . \n")
       board2.place(@sub, ["B2", "C2"])
-      expect(board2.render(true)).to eq("  1 2 3 \nA S S S \nB . S . \nC . S . \nD . . . \nE . . . \n")
-      expect(board2.render).to eq("  1 2 3 \nA . . . \nB . . . \nC . . . \nD . . . \nE . . . \n")
+      expect(board2.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . S . . \nC . S . . \nD . . . . \nE . . . . \n")
+      expect(board2.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \nE . . . . \n")
     end
 
 
