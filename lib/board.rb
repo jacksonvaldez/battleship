@@ -102,7 +102,22 @@ class Board
         return false
       end
     end
-
-
   end
+
+  # method to check cell by name
+  def get_cell(name)
+    if @cell_coordinates.include?(name)
+      return @cells[@cell_coordinates.index(name)]
+    else
+      return nil
+    end
+  end
+
+  # # place ship
+  # def place(ship, coordinates)
+  #   if valid_placement(ship, coordinates)
+  #     cells
+  #
+  #   end
+  # end
 end
