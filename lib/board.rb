@@ -45,8 +45,8 @@ class Board
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
     # Generates an array of cells for the board
-    @width.times do |w|
-      @height.times do |h|
+    @height.times do |h|
+      @width.times do |w|
         @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
         @cell_coordinates.push("#{alphabet[h]}#{w + 1}")
       end

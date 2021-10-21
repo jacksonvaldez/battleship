@@ -1,9 +1,5 @@
 require './lib/board'
 
-
-
-
-
 describe '#everything_same?' do
   it 'returns true if the array given has elements that are all equal to each other' do
     expect(everything_same?([1, 1, 1, 1, 1])).to eq(true)
@@ -14,7 +10,6 @@ describe '#everything_same?' do
     expect(everything_same?(['A', 'B', 'C', 'D'])).to eq(false)
   end
 end
-
 
 
 describe '#is_sequential?' do
@@ -29,11 +24,7 @@ describe '#is_sequential?' do
 end
 
 
-
-
-
 describe Board do
-
   before(:each) do
     @cruiser = Ship.new('Cruiser', 3)
     @sub = Ship.new('Submarine', 2)
@@ -46,13 +37,11 @@ describe Board do
       expect(@board.height).to eq(5)
       expect(@board.width).to eq(3)
     end
-
     it 'has correct array length for @board.cells' do
       expect(@board.cells.length).to eq(15) # length * width (In this case 5 * 3)
     end
-
     it 'cell_coordinates initializes will correct cell coordinates' do
-      expect(@board.cell_coordinates).to eq(%w[A1 B1 C1 D1 E1 A2 B2 C2 D2 E2 A3 B3 C3 D3 E3])
+      expect(@board.cell_coordinates).to eq(%w[A1 A2 A3 B1 B2 B3 C1 C2 C3 D1 D2 D3 E1 E2 E3])
     end
   end
 
@@ -61,7 +50,6 @@ describe Board do
     it 'returns true if coordinate is valid' do
       expect(@board.valid_coordinate?('B3')).to eq(true)
     end
-
     it 'returns false if coordinate is invalid' do
       expect(@board.valid_coordinate?('J3')).to eq(false)
     end
@@ -74,7 +62,6 @@ describe Board do
       expect(@board.valid_placement?(@cruiser, ['D1', 'C1', 'B1'])).to eq(true)
       expect(@board.valid_placement?(@cruiser, ['B3', 'B1', 'B2'])).to eq(true)
     end
-
     it 'returns false if placement is invalid' do
       expect(@board.valid_placement?(@cruiser, ["A1", "B1", "C2"])).to eq(false)
       expect(@board.valid_placement?(@cruiser, ["A1", "A2", "A4"])).to eq(false)
@@ -98,6 +85,7 @@ describe Board do
     end
   end
 
+
   describe ' #get_cell' do
     it 'returns nil if cell is not on board' do
       expect(@board.get_cell("Z1")).to eq(nil)
@@ -107,6 +95,7 @@ describe Board do
     end
   end
 
+
   describe ' #render' do
     it 'returns correct string' do
       expect(@board.render).to be_a(String)
@@ -114,6 +103,14 @@ describe Board do
     it 'returns correct string' do
       expect(@board.render).to eq("  1 2 3 \nA . . . \nB . . . \nC . . . \nD . . . \nE . . . \n")
     end
+    it 'prints a board with a ship' do
+      @board.place(@cruiser, ["A1", "A2", "A3"])
+      expect(@board.render(true)).to eq("  1 2 3 \nA S S S \nB . . . \nC . . . \nD . . . \nE . . . \n")
+      @board.place(@sub, ["B2", "C2"])
+      expect(@board.render(true)).to eq("  1 2 3 \nA S S S \nB . S . \nC . S . \nD . . . \nE . . . \n")
+      expect(@board.render).to eq("  1 2 3 \nA . . . \nB . . . \nC . . . \nD . . . \nE . . . \n")
+    end
+
   end
 
 end
