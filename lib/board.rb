@@ -26,7 +26,7 @@ class Board
   def initialize(height, width)
     @height = height
     @width = width
-    @cells = []
+    @cells = Hash.new()
     @cell_coordinates = [] #An array of coordinates(strings) for each cell object
 
 
@@ -40,12 +40,13 @@ class Board
     # D . . .
     # E . . .
 
-    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    alphabet = %w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
 
     # Generates an array of cells for the board
-    @width.times do |w|
-      @height.times do |h|
-        @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
+    @height.times do |h|
+      @width.times do |w|
+        #@cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
+        @cells["#{alphabet[h]}#{w + 1}"] = Cell.new("#{alphabet[h]}#{w + 1}")
         @cell_coordinates.push("#{alphabet[h]}#{w + 1}")
       end
     end
@@ -63,7 +64,6 @@ class Board
 
   # Tests if a ship placement is possible on the board
   def valid_placement?(ship, coordinates)
-
 
     def parse_letters(strings)
       strings.map do |element|
@@ -97,29 +97,22 @@ class Board
         else
           return false
         end
-      else
+      else # If neither letter nor number are in alignment, return false.
         return false
       end
     end
   end
 
-  # method to check cell by name
-  def get_cell(name)
-    if @cell_coordinates.include?(name)
-      return @cells[@cell_coordinates.index(name)]
-    else
-      return nil
-    end
-  end
 
   # place ship
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
       coordinates.each do |coordinate|
-        get_cell(coordinate).place_ship(ship)
+        @cells[coordinate].place_ship(ship)
       end
     end
   end
+
 
   # this is start of render method
   def render(show = false)
@@ -129,19 +122,15 @@ class Board
     print_text =[]
 
     # generate the first row
-    # create array of numbers based on width
-    first_row = (1..@width).to_a
-    # change each number in array to a string of that number
-    first_row = first_row.map do |element|
+    first_row = (1..@width).to_a # create array of numbers based on width
+    first_row = first_row.map do |element| # change each number in array to a string of that number
       element.to_s
     end
-    # add white space item to beginning of array, and "\n" to end of array
-    first_row.unshift(" ").push("\n")
-    # collapse array into single string, and add as first item (row) of our print_text array
-    print_text << first_row.join(" ")
+    first_row.unshift(" ").push("\n") # add white space item to beginning of array, and "\n" to end of array
+    print_text << first_row.join(" ") # collapse array into single string, and add as first item (row) of our print_text array
 
     # iterate through each "row" of the cells array
-    @cells.each_slice(@width) do |row|
+    @cells.values.each_slice(@width) do |row|
       # iterate through each cell in row to return the render string (S, ., M etc.)
       cell_text = row.map do |cell|
         cell.render(show)
