@@ -7,9 +7,7 @@ public # Allows the methods below to be accessed inside the Board class definiti
 
 # Testing if every element in an array is the same. [1, 2, 3] --> false,    ['hi', 'hi', 'hi'] --> true
 def everything_same?(array)
-  array.all? do |element|
-    element == array[0]
-  end
+  array.uniq.length <= 1
 end
 
 # Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
@@ -54,14 +52,9 @@ class Board
   end
 
   # Tests if a coordinate is a valid placement on the board
+  # Return true only if both coordinate valid and cell empty
   def valid_coordinate?(coordinate)
-    check_coordinate = @cell_coordinates.include?(coordinate)
-    if check_coordinate
-      check_ship = get_cell(coordinate).empty?
-    else
-      check_ship = false
-    end
-    check_coordinate && check_ship #return true only if both coordinate valid and cell empty
+    @cell_coordinates.include?(coordinate) && get_cell(coordinate).empty?
   end
 
 
