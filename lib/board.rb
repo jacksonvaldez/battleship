@@ -105,9 +105,8 @@ class Board
 
   # this is start of render method
   def render(show = false)
-    # gather working variables and values
+    # gather working variables and aggregators
     letters = ('A'..'Z').to_a[0..(@height -1)]
-    counter = 0
     print_text =[]
 
     # generate the first row
@@ -115,20 +114,18 @@ class Board
     first_row = first_row.map do |element| # change each number in array to a string of that number
       element.to_s
     end
-    first_row.unshift(" ").push("\n") # add white space item to beginning of array, and "\n" to end of array
-    print_text << first_row.join(" ") # collapse array into single string, and add as first item (row) of our print_text array
+    # add first row to print_text
+    # prepend white space and append newline to first row, then shovel into print_text
+    print_text << first_row.unshift(" ").push("\n").join(" ")
 
     # iterate through each "row" of the cells array
-    @cells.values.each_slice(@width) do |row|
+    @cells.values.each_slice(@width).with_index(0) do |row, counter|
       # iterate through each cell in row to return the render string (S, ., M etc.)
       cell_text = row.map do |cell|
         cell.render(show)
       end
-      cell_text.unshift(letters[counter]) # append row letter
-      cell_text << "\n" # add /n to end of array
-      cell_text = cell_text.join(" ") # collapse array into single string
-      counter += 1 # update counter
-      print_text << cell_text
+      # prepend row letter, append newline, join with space, then shovel to print)text array.
+      print_text << cell_text.unshift(letters[counter]).push("\n").join(" ")
     end
     print_text = print_text.join()
   end
