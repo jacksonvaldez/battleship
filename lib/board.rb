@@ -39,7 +39,7 @@ class Board
     # D . . .
     # E . . .
 
-    alphabet = %w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
+    alphabet = ('A'..'Z').to_a
 
     # Generates an array of cells for the board
     @height.times do |h|
@@ -115,7 +115,7 @@ class Board
   # this is start of render method
   def render(show = false)
     # gather working variables and values
-    letters = %w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z][0..(@height -1)]
+    letters = ('A'..'Z').to_a[0..(@height -1)]
     counter = 0
     print_text =[]
 
