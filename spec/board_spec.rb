@@ -36,6 +36,7 @@ describe Board do
 
   before(:each) do
     @cruiser = Ship.new('Cruiser', 3)
+    @sub = Ship.new('Submarine', 2)
     @board = Board.new(5, 3)
   end
 
@@ -98,11 +99,21 @@ describe Board do
   end
 
   describe ' #get_cell' do
-    it 'returns nil if cell is not on board' do
+    xit 'returns nil if cell is not on board' do
       expect(@board.get_cell("Z1")).to eq(nil)
     end
-    it 'returns the correct cell' do
+    xit 'returns the correct cell' do
       expect(@board.get_cell("A1").coordinate).to eq("A1")
     end
   end
+
+  describe ' #render' do
+    it 'returns correct string' do
+      expect(@board.render).to be_a(String)
+    end
+    it 'returns correct string' do
+      expect(@board.render).to eq("  1 2 3 \nA . . . \nB . . . \nC . . . \nD . . . \nE . . . \n")
+    end
+  end
+
 end

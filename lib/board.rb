@@ -125,14 +125,36 @@ class Board
   end
 
   # this is start of render method
-  def render(*show)
-    board_render = []
-    board_render[0] = '  '
-    @width.times do |w|
-      board_render[0] += "#{w + 1} "
+  def render(show = false)
+    # gather working variables and values
+    letters = %w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z][0..(@height -1)]
+    counter = 0
+    print_text =[]
+
+    # generate the first row
+    # create array of numbers based on width
+    first_row = (1..@width).to_a
+    # change each number in array to a string of that number
+    first_row = first_row.map do |element|
+      element.to_s
     end
-    @height.times do |h|
-      board_render[]
+    # add white space item to beginning of array, and "\n" to end of array
+    first_row.unshift(" ").push("\n")
+    # collapse array into single string, and add as first item (row) of our print_text array
+    print_text << first_row.join(" ")
+
+    # iterate through each "row" of the cells array
+    @cells.each_slice(@width) do |row|
+      # iterate through each cell in row to return the render string (S, ., M etc.)
+      cell_text = row.map do |cell|
+        cell.render(show)
+      end
+      cell_text.unshift(letters[counter]) # append row letter
+      cell_text << "\n" # add /n to end of array
+      cell_text = cell_text.join(" ") # collapse array into single string
+      counter += 1 # update counter
+      print_text << cell_text
     end
+    print_text = print_text.join()
   end
 end
