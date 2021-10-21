@@ -123,4 +123,16 @@ class Board
       end
     end
   end
+
+  # this is start of render method
+  def render(*show)
+    board_render = []
+    board_render[0] = '  '
+    @width.times do |w|
+      board_render[0] += "#{w + 1} "
+    end
+    @height.times do |h|
+      board_render[]
+    end
+  end
 end
