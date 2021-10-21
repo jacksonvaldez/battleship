@@ -36,14 +36,13 @@ class Cell
   end
 
   # method to return status of cell
-  def render(*show) # if no argument given, defaulted to nil
-
+  def render(show = false) # if no argument given, defaulted to nil
     # run tests to determine what to display
     if !fired_upon? && empty?
       "." # empty
-    elsif !fired_upon? && !empty? && ((show[0] == nil) || (show[0] == false))
+    elsif !fired_upon? && !empty? && show == false
       "." # ship exists, but don't show it
-    elsif !fired_upon? && !empty? && show[0] == true
+    elsif !fired_upon? && !empty? && show == true
       "S" # Ship
     elsif fired_upon? && empty?
       "M" # Missed
