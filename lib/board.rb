@@ -28,7 +28,7 @@ class Board
   def initialize(height, width)
     @height = height
     @width = width
-    @cells = []
+    @cells = Hash.new()
     @cell_coordinates = [] #An array of coordinates(strings) for each cell object
 
 
@@ -42,12 +42,13 @@ class Board
     # D . . .
     # E . . .
 
-    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+    alphabet = %w[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]
 
     # Generates an array of cells for the board
     @height.times do |h|
       @width.times do |w|
-        @cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
+        #@cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
+        @cells["#{alphabet[h]}#{w + 1}"] = Cell.new("#{alphabet[h]}#{w + 1}")
         @cell_coordinates.push("#{alphabet[h]}#{w + 1}")
       end
     end
@@ -57,7 +58,7 @@ class Board
   def valid_coordinate?(coordinate)
     check_coordinate = @cell_coordinates.include?(coordinate)
     if check_coordinate
-      check_ship = get_cell(coordinate).empty?
+      check_ship = @cells[coordinate].empty?
     else
       check_ship = false
     end
@@ -123,7 +124,7 @@ class Board
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
       coordinates.each do |coordinate|
-        get_cell(coordinate).place_ship(ship)
+        @cells[coordinate].place_ship(ship)
       end
     end
   end
@@ -148,7 +149,7 @@ class Board
     print_text << first_row.join(" ")
 
     # iterate through each "row" of the cells array
-    @cells.each_slice(@width) do |row|
+    @cells.values.each_slice(@width) do |row|
       # iterate through each cell in row to return the render string (S, ., M etc.)
       cell_text = row.map do |cell|
         cell.render(show)

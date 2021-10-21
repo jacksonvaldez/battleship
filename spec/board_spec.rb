@@ -33,12 +33,13 @@ describe Board do
 
 
   describe '#initialize' do
-    it 'has dimensions' do
+    it 'has attributes' do
       expect(@board.height).to eq(5)
       expect(@board.width).to eq(3)
+      expect(@board.cells).to be_a(Hash)
     end
-    it 'has correct array length for @board.cells' do
-      expect(@board.cells.length).to eq(15) # length * width (In this case 5 * 3)
+    it '@board.cells has correct # of items' do
+      expect(@board.cells.keys.length).to eq(15) # length * width (In this case 5 * 3)
     end
     it 'cell_coordinates initializes will correct cell coordinates' do
       expect(@board.cell_coordinates).to eq(%w[A1 A2 A3 B1 B2 B3 C1 C2 C3 D1 D2 D3 E1 E2 E3])
@@ -73,25 +74,25 @@ describe Board do
   describe ' #place' do
     it 'places a ship in the right cells if placement is valid' do
       @board.place(@cruiser,["A1", "B1", "C2"])
-      expect(@board.get_cell("A1").empty?).to eq(true)
+      expect(@board.cells["A1"].empty?).to eq(true)
       @board.place(@cruiser, ['A1', 'A2', 'A3'])
-      expect(@board.get_cell("A1").empty?).to eq(false)
-      expect(@board.get_cell("A2").empty?).to eq(false)
-      expect(@board.get_cell("A3").empty?).to eq(false)
+      expect(@board.cells["A1"].empty?).to eq(false)
+      expect(@board.cells["A2"].empty?).to eq(false)
+      expect(@board.cells["A3"].empty?).to eq(false)
     end
     it 'places the correct ship' do
       @board.place(@cruiser, ['A1', 'A2', 'A3'])
-      expect(@board.get_cell("A1").ship).to eq(@cruiser)
+      expect(@board.cells["A1"].ship).to eq(@cruiser)
     end
   end
 
 
-  describe ' #get_cell' do
+  describe ' #cells' do
     it 'returns nil if cell is not on board' do
-      expect(@board.get_cell("Z1")).to eq(nil)
+      expect(@board.cells["Z1"]).to eq(nil)
     end
     it 'returns the correct cell' do
-      expect(@board.get_cell("A1").coordinate).to eq("A1")
+      expect(@board.cells["A1"].coordinate).to eq("A1")
     end
   end
 
