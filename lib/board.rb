@@ -21,13 +21,12 @@ end
 
 class Board
 
-  attr_reader :height, :width, :cells, :cell_coordinates
+  attr_reader :height, :width, :cells
 
   def initialize(height, width)
     @height = height
     @width = width
     @cells = Hash.new()
-    @cell_coordinates = [] #An array of coordinates(strings) for each cell object
 
 
     # Creates an array of cell objects based on height and width
@@ -47,7 +46,6 @@ class Board
       @width.times do |w|
         #@cells.push(Cell.new("#{alphabet[h]}#{w + 1}"))
         @cells["#{alphabet[h]}#{w + 1}"] = Cell.new("#{alphabet[h]}#{w + 1}")
-        @cell_coordinates.push("#{alphabet[h]}#{w + 1}")
       end
     end
   end
@@ -55,7 +53,7 @@ class Board
   # Tests if a coordinate is a valid placement on the board
   # Return true only if both coordinate valid and cell empty
   def valid_coordinate?(coordinate)
-    @cell_coordinates.include?(coordinate) && @cells[coordinate].empty?
+    @cells.keys.include?(coordinate) && @cells[coordinate].empty?
   end
 
 

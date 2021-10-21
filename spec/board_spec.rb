@@ -42,7 +42,7 @@ describe Board do
       expect(@board.cells.keys.length).to eq(15) # length * width (In this case 5 * 3)
     end
     it 'cell_coordinates initializes will correct cell coordinates' do
-      expect(@board.cell_coordinates).to eq(%w[A1 A2 A3 B1 B2 B3 C1 C2 C3 D1 D2 D3 E1 E2 E3])
+      expect(@board.cells.keys).to eq(%w[A1 A2 A3 B1 B2 B3 C1 C2 C3 D1 D2 D3 E1 E2 E3])
     end
   end
 
