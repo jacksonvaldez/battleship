@@ -99,10 +99,10 @@ describe Board do
   end
 
   describe ' #get_cell' do
-    xit 'returns nil if cell is not on board' do
+    it 'returns nil if cell is not on board' do
       expect(@board.get_cell("Z1")).to eq(nil)
     end
-    xit 'returns the correct cell' do
+    it 'returns the correct cell' do
       expect(@board.get_cell("A1").coordinate).to eq("A1")
     end
   end
