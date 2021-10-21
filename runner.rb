@@ -33,6 +33,22 @@ def get_dimensions
 end
 
 
+def get_ships(max_length)
+  puts "Pleaser enter a list of ships you would like to use for this game. Example: Cruiser 3, Submarine 2, Big 5. This would create 3 ships. You can create as many as you would like".light_black.bold
+  print ' > '.magenta
+  ships = gets.chomp
+  ships = ships.split(',')
+  ships = ships.find_all do |ship|
+    ship.split.length == 2 && ship.split[1].to_i <= max_length && ship.split[1].to_i >= 2
+  end
+  ship_objects = []
+  ships.each do |ship|
+    ship_objects.push(Ship.new(ship.split[0], ship.split[1]))
+  end
+  ship_objects
+end
+
+
 
 
 
@@ -48,6 +64,11 @@ def start_game
   dimensions = get_dimensions
   player_board = Board.new(dimensions[1], dimensions[0])
   computer_board = Board.new(dimensions[1], dimensions[0])
+
+  ships = []
+  until ships.length > 0
+    ships = get_ships([dimensions[1], dimensions[0]].min)
+  end
 
 end
 
