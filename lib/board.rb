@@ -48,6 +48,7 @@ class Board
         @cells["#{alphabet[h]}#{w + 1}"] = Cell.new("#{alphabet[h]}#{w + 1}")
       end
     end
+
   end
 
   # Tests if a coordinate is a valid placement on the board
@@ -55,8 +56,6 @@ class Board
   def valid_coordinate?(coordinate)
     @cells.keys.include?(coordinate) && @cells[coordinate].empty?
   end
-
-
 
 
 
@@ -69,13 +68,11 @@ class Board
       end
     end
 
-
     def parse_numbers(strings)
       strings.map do |element|
         element[1] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
       end
     end
-
 
     if ship.length == coordinates.length # Testing if the ship length is the same length as the coordinates given
       coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
@@ -83,22 +80,16 @@ class Board
           return false
         end
       end
-      if self.everything_same?(parse_letters(coordinates)) # If all the coordinates start with the same letter
-        if self.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential
-          return true # Add code here that tests for overlapping ships
-        else
-          return false
-        end
-      elsif self.everything_same?(parse_numbers(coordinates)) # If all the coordinates end with the same number
-        if self.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential
-          return true # Add code here that tests for overlapping ships
-        else
-          return false
-        end
-      else # If neither letter nor number are in alignment, return false.
-        return false
-      end
     end
+
+    if self.everything_same?(parse_letters(coordinates)) && self.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
+      return true # Add code here that tests for overlapping ships
+    elsif self.everything_same?(parse_numbers(coordinates)) && self.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
+      return true # Add code here that tests for overlapping ships
+    else
+      return false
+    end
+
   end
 
 
@@ -141,4 +132,5 @@ class Board
     end
     print_text = print_text.join()
   end
+
 end
