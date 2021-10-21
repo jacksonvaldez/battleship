@@ -55,7 +55,7 @@ class Board
   # Tests if a coordinate is a valid placement on the board
   # Return true only if both coordinate valid and cell empty
   def valid_coordinate?(coordinate)
-    @cell_coordinates.include?(coordinate) && get_cell(coordinate).empty?
+    @cell_coordinates.include?(coordinate) && @cells[coordinate].empty?
   end
 
 
