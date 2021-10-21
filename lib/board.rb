@@ -113,11 +113,12 @@ class Board
     end
   end
 
-  # # place ship
-  # def place(ship, coordinates)
-  #   if valid_placement(ship, coordinates)
-  #     cells
-  #
-  #   end
-  # end
+  # place ship
+  def place(ship, coordinates)
+    if valid_placement?(ship, coordinates)
+      coordinates.each do |coordinate|
+        get_cell(coordinate).place_ship(ship)
+      end
+    end
+  end
 end

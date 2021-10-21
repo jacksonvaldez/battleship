@@ -83,17 +83,17 @@ describe Board do
 
 
   describe ' #place' do
-    xit 'places a ship in the right cells if placement is valid' do
+    it 'places a ship in the right cells if placement is valid' do
       @board.place(@cruiser,["A1", "B1", "C2"])
-      expect(@board.cells[@board.cells.index("A1")].empty?).to eq(true)
+      expect(@board.get_cell("A1").empty?).to eq(true)
       @board.place(@cruiser, ['A1', 'A2', 'A3'])
-      expect(@board.cells[@board.cells.index("A1")].empty?).to eq(false)
-      expect(@board.cells[@board.cells.index("A2")].empty?).to eq(false)
-      expect(@board.cells[@board.cells.index("A3")].empty?).to eq(false)
+      expect(@board.get_cell("A1").empty?).to eq(false)
+      expect(@board.get_cell("A2").empty?).to eq(false)
+      expect(@board.get_cell("A3").empty?).to eq(false)
     end
-    xit 'places the correct ship' do
+    it 'places the correct ship' do
       @board.place(@cruiser, ['A1', 'A2', 'A3'])
-      expect(@board.cells[@board.cells.index("A1")].ship).to eq(@cruiser)
+      expect(@board.get_cell("A1").ship).to eq(@cruiser)
     end
   end
 
