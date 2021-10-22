@@ -81,7 +81,7 @@ def get_ships(max_length)
 end
 
 
-
+# here we actually run the game through the CLI
 starter_message
 if setup?
   dimensions = get_dimensions
@@ -95,6 +95,8 @@ end
 # gather ships from user
 # generate boards
 # generate ships
+
+
 # place ships
 # place_ships(game.ships_ai, true) #pass ships array and boolean toggle for computer or User placement
 # place_ships(game.ships_user, false)

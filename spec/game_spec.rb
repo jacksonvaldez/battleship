@@ -23,8 +23,11 @@ describe Game do
     expect(@game.board_user.height).to eq(@height)
   end
 
-  describe ' #starter_message' do
-
+  describe ' #place_ship' do
+    xit 'places all ships' do
+      @game.place_ships(@game.board_ai, @game.ships_ai, true)
+      #expect(@game.board_ai.)
+    end
   end
 
 end
