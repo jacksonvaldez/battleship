@@ -26,11 +26,19 @@ class Game
         # Generate 4 possible cell arrays based on ship length
         # Check validity. Randomly choose one that works.
         # Keep looping until valid placement found
-        start_cell = board.cells.sample
-        possible_placements << create_cell_array(start_cell, ship.length, "up")
-        possible_placements << create_cell_array(start_cell, ship.length, "down")
-        possible_placements << create_cell_array(start_cell, ship.length, "left")
-        possible_placements << create_cell_array(start_cell, ship.length, "right")
+        chosen_placement = nil
+        possible_placements = []
+        while chosen_placement == nil do
+          start_cell = board.cells.values.sample
+          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "up")
+          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "down")
+          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "left")
+          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "right")
+          valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
+          chosen_placement = valid_placements.sample(1)
+        end
+        #place ship
+        board.place(ship,chosen_placement)
       end
     end
   end
