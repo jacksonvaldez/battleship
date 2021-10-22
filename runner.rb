@@ -85,7 +85,7 @@ end
 starter_message
 if setup?
   dimensions = get_dimensions
-  ships = get_ships(5)
+  ships = get_ships([dimensions[1], dimensions[0]].min)
   game = Game.new(dimensions, ships)
 end
 # print starter message

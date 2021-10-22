@@ -19,33 +19,6 @@ class Game
     @board_user = Board.new(dimensions[0], dimensions[1])
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  def start_game
-
-    puts starter_message
-    puts "\nLets Get Things Setup!"
-    puts "\n"
-
-    dimensions = get_dimensions
-    player_board = Board.new(dimensions[1], dimensions[0])
-    computer_board = Board.new(dimensions[1], dimensions[0])
-
-    ships = get_ships([dimensions[1], dimensions[0]].min)
-
-  end
-
   def place_ships(ships)
     #ask for locations for each ship
   end
