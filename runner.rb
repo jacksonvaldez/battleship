@@ -19,20 +19,20 @@ def setup?
   puts "Enter p to play. Enter q to quit."
 
   # loop through until correct answer is given
-  loop? = true
-  until loop? == false do
+  loop = true
+  until loop == false do
     choice = gets.chomp
     if choice == "q"
       puts "Ok then, let's play another time. Have a nice day!"
-      loop? = false
+      loop = false
       return false
     elsif choice == "p"
       puts "Let's play Battleship!!!\n"
-      loop? = false
+      loop = false
       return true
     else
       puts "I'm not sure what you mean. Please enter p to play. Enter q to quit."
-      loop? = true
+      loop = true
     end
   end
 end
