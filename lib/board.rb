@@ -1,5 +1,5 @@
 require './lib/cell'
-require './lib/helpful_methods'
+require './lib/array_methods'
 
 
 
@@ -67,9 +67,9 @@ class Board
       end
     end
 
-    if HelpfulMethods.everything_same?(parse_letters(coordinates)) && HelpfulMethods.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
+    if parse_letters(coordinates).everything_same? && parse_numbers(coordinates).is_sequential? # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
       return true # Add code here that tests for overlapping ships
-    elsif HelpfulMethods.everything_same?(parse_numbers(coordinates)) && HelpfulMethods.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
+    elsif parse_numbers(coordinates).everything_same? && parse_letters(coordinates).is_sequential? # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
       return true # Add code here that tests for overlapping ships
     else
       return false
