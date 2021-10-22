@@ -30,4 +30,19 @@ describe Game do
     end
   end
 
+  describe ' #create_cell_array' do
+    it 'creates coordinates in up direction' do
+      expect(@game.create_cell_array("C3", 3, "up")).to eq(["C3", "B3", "A3"])
+    end
+    it 'creates coordinates in down direction' do
+      expect(@game.create_cell_array("C3", 3, "down")).to eq(["C3", "D3", "E3"])
+    end
+    it 'creates coordinates in left direction' do
+      expect(@game.create_cell_array("C3", 3, "left")).to eq(["C3", "C2", "C1"])
+    end
+    it 'creates coordinates in right direction' do
+      expect(@game.create_cell_array("C3", 3, "left")).to eq(["C3", "C2", "C1"])
+    end
+  end
+
 end

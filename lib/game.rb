@@ -27,23 +27,49 @@ class Game
         # Check validity. Randomly choose one that works.
         # Keep looping until valid placement found
         start_cell = board.cells.sample
-        possible_placements << create_cell_array(start_cell, ship.length, 0)
-        possible_placements << create_cell_array(start_cell, ship.length, 1)
-        possible_placements << create_cell_array(start_cell, ship.length, 2)
-        possible_placements << create_cell_array(start_cell, ship.length, 3)
+        possible_placements << create_cell_array(start_cell, ship.length, "up")
+        possible_placements << create_cell_array(start_cell, ship.length, "down")
+        possible_placements << create_cell_array(start_cell, ship.length, "left")
+        possible_placements << create_cell_array(start_cell, ship.length, "right")
       end
     end
   end
 
   def create_cell_array(coordinate, length, direction)
-    start_letter = start_cell.coordinate[0]
-    start_num = start_cell.coordinate[1]
-    cells_up = [coordinate]
-    cells_right = [coordinate]
-    cells_down =[coordinate]
-    cells_left = [coordinate]
-    ship.length.times do
-      cells_up << "I'm tired"
+    alphabet = ('A'..'Z').to_a
+    start_letter = coordinate[0]
+    start_num = coordinate[1]
+    new_coordinates = []
+
+
+    if direction == "up"
+      # create array that decreases in letters but has same number
+      start_index = start_letter.ord
+      end_index = start_index - (length - 1)
+      # create ord number array, convert to characters, append column #, then reverse.
+      # create array doesn't work (large..small) so we do (small..large) then reverse.
+      new_coordinates = (end_index..start_index).to_a.map { |x| x.chr + "#{start_num}" }.reverse
+    elsif direction == "down"
+      # create array that increases in letters but has same number
+      start_index = start_letter.ord
+      end_index = start_index + (length - 1)
+      # create ord number array, convert to characters, append column #.
+      new_coordinates = (start_index..end_index).to_a.map { |x| x.chr + "#{start_num}" }
+    elsif direction == "left"
+      # create array with same letter that decreases in number
+      start_index = start_num.to_i
+      end_index = start_index - (length - 1)
+      # create number array, convert to string, prepend column letter, then reverse.
+      # create array doesn't work (large..small) so we do (small..large) then reverse.
+      new_coordinates = (end_index..start_index).to_a.map { |x| "#{start_letter}" + x.to_s}.reverse
+    elsif direction == "right"
+      # create array with same letter that increases in number
+      start_index = start_num.to_i
+      end_index = start_index + (length - 1)
+      # create number array, convert to string, prepend column letter.
+      new_coordinates = (start_index..end_index).to_a.map { |x| "#{start_letter}" + x.to_s}
+    else
+      []
     end
   end
 
