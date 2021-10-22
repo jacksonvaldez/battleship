@@ -1,3 +1,5 @@
+require './lib/array_methods'
+
 
 describe Array do
 
