@@ -41,7 +41,7 @@ describe Game do
       expect(@game.create_cell_array("C3", 3, "left")).to eq(["C3", "C2", "C1"])
     end
     it 'creates coordinates in right direction' do
-      expect(@game.create_cell_array("C3", 3, "left")).to eq(["C3", "C2", "C1"])
+      expect(@game.create_cell_array("C3", 3, "right")).to eq(["C3", "C4", "C5"])
     end
   end
 
