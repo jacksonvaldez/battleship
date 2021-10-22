@@ -11,25 +11,11 @@ class Game
               :board_user
 
 
-  def initialize(width, height, ships)
-    @ships_ai = ships
-    @ships_user = ships
-    @board_ai = Board.new(width, height)
-    @board_user = Board.new(width, height)
+  def initialize()
     @turn_counter = 0
   end
 
-  def starter_message
-    text = File.new('./txt_files/starter_message.txt').read
-    text = text.split("\n")
 
-    text[5][0..16] = text[5][0..16].yellow
-    text[5][32..54] = text[5][32..54].blue
-    text[5][69..86] = text[5][69..86].yellow
-
-    text[22] = text[22].yellow
-    text
-  end
 
 
 
