@@ -12,7 +12,6 @@ class Board
     @height = height
     @width = width
     @cells = Hash.new()
-    @helpful_methods = HelpfulMethods.new
 
 
     # Creates an array of cell objects based on height and width
@@ -68,9 +67,9 @@ class Board
       end
     end
 
-    if @helpful_methods.everything_same?(parse_letters(coordinates)) && @helpful_methods.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
+    if HelpfulMethods.everything_same?(parse_letters(coordinates)) && HelpfulMethods.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
       return true # Add code here that tests for overlapping ships
-    elsif @helpful_methods.everything_same?(parse_numbers(coordinates)) && @helpful_methods.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
+    elsif HelpfulMethods.everything_same?(parse_numbers(coordinates)) && HelpfulMethods.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
       return true # Add code here that tests for overlapping ships
     else
       return false
