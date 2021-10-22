@@ -10,8 +10,13 @@ class Game
               :board_ai,
               :board_user
 
-  def initialize
 
+  def initialize(width, height, ships)
+    @ships_ai = ships
+    @ships_user = ships
+    @board_ai = Board.new(width, height)
+    @board_user = Board.new(width, height)
+    @turn_counter = 0
   end
 
   def starter_message
