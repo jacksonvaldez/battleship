@@ -1,20 +1,5 @@
 require './lib/cell'
-
-
-
-
-public # Allows the methods below to be accessed inside the Board class definition
-
-# Testing if every element in an array is the same. [1, 2, 3] --> false,    ['hi', 'hi', 'hi'] --> true
-def everything_same?(array)
-  array.uniq.length <= 1
-end
-
-# Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
-def is_sequential?(array)
-  array.sort!
-  (array.first..array.last).to_a == array
-end
+require './lib/helpful_methods'
 
 
 
@@ -27,6 +12,7 @@ class Board
     @height = height
     @width = width
     @cells = Hash.new()
+    @helpful_methods = HelpfulMethods.new
 
 
     # Creates an array of cell objects based on height and width
@@ -82,9 +68,9 @@ class Board
       end
     end
 
-    if self.everything_same?(parse_letters(coordinates)) && self.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
+    if @helpful_methods.everything_same?(parse_letters(coordinates)) && @helpful_methods.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
       return true # Add code here that tests for overlapping ships
-    elsif self.everything_same?(parse_numbers(coordinates)) && self.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
+    elsif @helpful_methods.everything_same?(parse_numbers(coordinates)) && @helpful_methods.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
       return true # Add code here that tests for overlapping ships
     else
       return false
