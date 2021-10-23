@@ -8,7 +8,7 @@ class Board
 
   attr_reader :height, :width, :cells
 
-  def initialize(width, height)
+  def initialize(height, width)
     @height = height
     @width = width
     @cells = Hash.new()
@@ -55,15 +55,17 @@ class Board
 
     def parse_numbers(strings)
       strings.map do |element|
-        element[1] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
+        element[1..2] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
       end
     end
 
-    if ship.length == coordinates.length # Testing if the ship length is the same length as the coordinates given
-      coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
-        if !self.valid_coordinate?(coordinate)
-          return false
-        end
+    if !(ship.length == coordinates.length) # Testing if the ship length is the same length as the coordinates given, and if there are more than 2 coordinates given
+      return false
+    end
+
+    coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
+      if !self.valid_coordinate?(coordinate)
+        return false
       end
     end
 
@@ -84,6 +86,7 @@ class Board
       coordinates.each do |coordinate|
         @cells[coordinate].place_ship(ship)
       end
+      return true #returns true if the placement was successful
     end
   end
 
@@ -97,11 +100,19 @@ class Board
     # generate the first row
     first_row = (1..@width).to_a # create array of numbers based on width
     first_row = first_row.map do |element| # change each number in array to a string of that number
-      element.to_s
+      element.to_s[0]
     end
+    second_row = (1..@width).to_a # create array of numbers based on width
+    second_row = second_row.map do |element| # change each number in array to a string of that number
+      if element.to_s[1].class == String
+        element.to_s[1]
+      end
+    end
+
     # add first row to print_text
     # prepend white space and append newline to first row, then shovel into print_text
     print_text << first_row.unshift(" ").push("\n").join(" ")
+    print_text << "           " + second_row.join(" ") + "\n"
 
     # iterate through each "row" of the cells array
     @cells.values.each_slice(@width).with_index(0) do |row, counter|
@@ -113,6 +124,35 @@ class Board
       print_text << cell_text.unshift(letters[counter]).push("\n").join(" ")
     end
     print_text = print_text.join()
+  end
+
+  def fits?(ship_length)
+    alphabet = ('A'..'Z').to_a
+    counter_1 = 0
+    counter_2 = 0
+    @height.times do |h|
+      @width.times do |w|
+        if counter_1 >= ship_length
+          return true
+        elsif @cells["#{alphabet[h]}#{w + 1}"].empty?
+          counter_1 += 1
+        else
+          counter_1 = 0
+        end
+      end
+    end
+    @width.times do |w|
+      @height.times do |h|
+        if counter_2 >= ship_length
+          return true
+        elsif @cells["#{alphabet[h]}#{w + 1}"].empty?
+          counter_2 += 1
+        else
+          counter_2 = 0
+        end
+      end
+    end
+    return false
   end
 
 end

@@ -1,91 +1,156 @@
 require './lib/board'
+require './lib/computer_user'
+require './lib/human_user'
 require 'colorize' # gem install colorize in terminal if needed
 
 
 class Game
   #initialzie
-  attr_reader :turn_counter,
-              :ships_ai,
-              :ships_user,
-              :board_ai,
-              :board_user
+  attr_reader :turn_counter, :computer_user, :human_user
 
 
   def initialize(dimensions, ships)
+    @computer_user = ComputerUser.new(Board.new(dimensions[0], dimensions[1]), ships)
+    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships)
     @turn_counter = 0
-    @ships_ai = ships
-    @ships_user = ships
-    @board_ai = Board.new(dimensions[0], dimensions[1])
-    @board_user = Board.new(dimensions[0], dimensions[1])
   end
 
-  def place_ships(board, ships, ai)
-    if ai #this trigger computer placement
-      ships.each do |ship|
-        # randomly choose starting cell.
-        # Generate 4 possible cell arrays based on ship length
-        # Check validity. Randomly choose one that works.
-        # Keep looping until valid placement found
-        chosen_placement = nil
-        possible_placements = []
-        while chosen_placement == nil do
-          start_cell = board.cells.values.sample
-          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "up")
-          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "down")
-          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "left")
-          possible_placements << create_cell_array(start_cell.coordinate, ship.length, "right")
-          valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
-          chosen_placement = valid_placements.sample(1)
-        end
-        #place ship
-        board.place(ship,chosen_placement)
+
+
+  def self.start_game
+
+    # Each stage has its own method. If a stage returns false, that means don't move onto the next stage.
+
+
+    # STAGE 1: Game prints the starter message to the terminal. Returns starter message string
+    puts self.starter_message
+
+    # STAGE 2: Game asks the user if they want to continue. If they do, it prompts them asking for ships and custom board dimensions.
+    # If the setup is successful, it will return a game object. If not, it will return nil
+    game = self.setup
+    if game.class != Game
+      return nil
+    end
+
+    # STAGE 3: Game asks the user and Steve to setup their boards
+    game.setup_boards
+
+
+
+    # STAGE 4: Game asks the user and Steve to take turns back and forth until someone has no more ships
+    # game.alternate_turns
+
+    # STAGE 5: Game ends itself and announces the winner
+    # if self.end_game == false
+    #   return nil
+    # end
+
+
+
+  end
+
+
+
+  def setup_boards
+    @computer_user.setup_board
+    @human_user.setup_board
+  end
+
+
+
+  def self.alternate_turns
+    if @turn_counter.even? || @turn_counter == 0 # If its the players turn
+      puts "Computer Player Board:"
+      puts @computer_user.board.render(false)
+      puts "Your Board:"
+      puts @human_user.board.render(true)
+      puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5"
+    else # If its not the players turn, then its the computers turn
+      puts "Steve is taking his turn..."
+    end
+  end
+
+
+
+  def self.starter_message
+    text = File.new('./txt_files/starter_message.txt').read
+    text = text.split("\n")
+
+    text[5][0..16] = text[5][0..16].yellow
+    text[5][32..54] = text[5][32..54].blue
+    text[5][69..86] = text[5][69..86].yellow
+
+    text[22] = text[22].yellow
+    return text
+  end
+
+  def self.setup
+    # ask user if they want to continue with game
+    puts "\n"
+    puts "Enter p to play. Enter q to quit."
+
+    # loop through until correct answer is given
+    loop = true
+    until loop == false do
+      choice = gets.chomp
+      if choice == "q"
+        puts "Ok then, let's play another time. Have a nice day!"
+        loop = false
+        return nil
+      elsif choice == "p"
+        puts "Let's play Battleship!!!"
+        puts "\n---------------------------------------------------------".yellow
+        dimensions = self.get_dimensions
+        ships = self.get_ships([dimensions[0], dimensions[1]].min)
+        return Game.new(dimensions, ships)
+      else
+        puts "I'm not sure what you mean. Please enter p to play. Enter q to quit."
+        loop = true
       end
     end
+
+
   end
 
-  def create_cell_array(coordinate, length, direction)
-    alphabet = ('A'..'Z').to_a
-    start_letter = coordinate[0]
-    start_num = coordinate[1]
-    new_coordinates = []
-
-
-    if direction == "up"
-      # create array that decreases in letters but has same number
-      start_index = start_letter.ord
-      end_index = start_index - (length - 1)
-      # create ord number array, convert to characters, append column #, then reverse.
-      # create array doesn't work (large..small) so we do (small..large) then reverse.
-      new_coordinates = (end_index..start_index).to_a.map { |x| x.chr + "#{start_num}" }.reverse
-    elsif direction == "down"
-      # create array that increases in letters but has same number
-      start_index = start_letter.ord
-      end_index = start_index + (length - 1)
-      # create ord number array, convert to characters, append column #.
-      new_coordinates = (start_index..end_index).to_a.map { |x| x.chr + "#{start_num}" }
-    elsif direction == "left"
-      # create array with same letter that decreases in number
-      start_index = start_num.to_i
-      end_index = start_index - (length - 1)
-      # create number array, convert to string, prepend column letter, then reverse.
-      # create array doesn't work (large..small) so we do (small..large) then reverse.
-      new_coordinates = (end_index..start_index).to_a.map { |x| "#{start_letter}" + x.to_s}.reverse
-    elsif direction == "right"
-      # create array with same letter that increases in number
-      start_index = start_num.to_i
-      end_index = start_index + (length - 1)
-      # create number array, convert to string, prepend column letter.
-      new_coordinates = (start_index..end_index).to_a.map { |x| "#{start_letter}" + x.to_s}
-    else
-      []
+  def self.get_dimensions
+    puts "Please choose the board dimensions (rows x columns).".light_black.bold
+    puts "Example: 15 x 20".light_black.italic
+    puts "\n"
+    print ' > '.magenta
+    dimensions = gets.chomp
+    while !(dimensions.split.length == 3 && dimensions.split[0].to_i <= 26 && dimensions.split[0].to_i >= 4 && dimensions.split[1] == 'x' && dimensions.split[2].to_i <= 26 && dimensions.split[2].to_i >= 4)
+      puts "Invalid Input. Example: 15 x 20".red
+      puts "Hint: maximum dimension is 26. minimum dimension is 4".red
+      puts "\n"
+      print ' > '.magenta
+      dimensions = gets.chomp
     end
+    puts "Great! You will be playing on boards with #{dimensions.split[0].to_i} rows and #{dimensions.split[2].to_i} columns".green
+    puts "\n"
+    [dimensions.split[0].to_i, dimensions.split[2].to_i]
   end
 
-  def take_turn(coordinate)
 
+  def self.get_ships(max_length)
+    puts "Pleaser enter a list of ships and their lengths that you would like to use for this game. You can create as many as you would like.".light_black.bold
+    puts "Example: ShipA 5, ShipB 4, ShipC 7".light_black.italic
+    ship_objects = []
+    until ship_objects.length > 0
+      puts "\n"
+      print ' > '.magenta
+      choice = gets.chomp
+      choice = choice.split(',')
+      choice = choice.find_all{|ship| ship.split.length == 2 && ship.split[1].to_i <= max_length && ship.split[1].to_i >= 2 }
+      choice = choice.map{|ship| ship_objects.push(Ship.new(ship.split[0], ship.split[1].to_i))}
+      ship_objects.uniq!{|ship| ship.name}
+      if ship_objects.length == 0
+        puts "Invalid Input. Example: Cruiser 3, Submarine 2".red
+        puts "Hint: maximum length is #{max_length}. Minimum length is 2".red
+      end
+    end
+    puts "Great! You have created #{ship_objects.length} ships!".green
+    puts "\n"
+    ship_objects
   end
 
-  def end_game
-
-  end
 end

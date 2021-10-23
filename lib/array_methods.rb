@@ -11,6 +11,12 @@ class Array # Adding custom methods to the array class.
     # Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
   def is_sequential?
     array = self
+    if array[0].to_i > 0
+      array = array.map { |e| e.to_i }
+    end
+    if array[0].to_i == 0
+      array = array.sort!
+    end
     array.sort!
     (array.first..array.last).to_a == array
   end
