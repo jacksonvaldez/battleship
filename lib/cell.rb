@@ -18,7 +18,7 @@ class Cell
 
   # method to check if cell is empty
   def empty?
-    ship == nil
+    @ship == nil
   end
 
   # method to check if cell has already been fired upon

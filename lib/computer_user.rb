@@ -42,7 +42,7 @@ class ComputerUser
 
 
 
-  def create_cell_array(coordinate, length, direction) #'A10', 10, 'down'
+  def create_cell_array(coordinate, length, direction)
     alphabet = ('A'..'Z').to_a
     start_letter = coordinate[0]
     start_num = coordinate[1..2]

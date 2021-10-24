@@ -34,11 +34,10 @@ class Game
 
     # STAGE 3: Game asks the user and Steve to setup their boards
     game.setup_boards
-
-
+    require 'pry'; binding.pry
 
     # STAGE 4: Game asks the user and Steve to take turns back and forth until someone has no more ships
-    # game.alternate_turns
+    game.alternate_turns
 
     # STAGE 5: Game ends itself and announces the winner
     # if self.end_game == false
@@ -58,13 +57,19 @@ class Game
 
 
 
-  def self.alternate_turns
+  def alternate_turns
+    until @computer_user.ships
+    end
     if @turn_counter.even? || @turn_counter == 0 # If its the players turn
       puts "Computer Player Board:"
       puts @computer_user.board.render(false)
       puts "Your Board:"
       puts @human_user.board.render(true)
-      puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5"
+      puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
+      print ' > '.magenta
+      choice = gets.chomp
+
+
     else # If its not the players turn, then its the computers turn
       puts "Steve is taking his turn..."
     end
@@ -113,30 +118,29 @@ class Game
   end
 
   def self.get_dimensions
+    puts "\n"
     puts "Please choose the board dimensions (rows x columns).".light_black.bold
     puts "Example: 15 x 20".light_black.italic
-    puts "\n"
     print ' > '.magenta
     dimensions = gets.chomp
     while !(dimensions.split.length == 3 && dimensions.split[0].to_i <= 26 && dimensions.split[0].to_i >= 4 && dimensions.split[1] == 'x' && dimensions.split[2].to_i <= 26 && dimensions.split[2].to_i >= 4)
       puts "Invalid Input. Example: 15 x 20".red
       puts "Hint: maximum dimension is 26. minimum dimension is 4".red
-      puts "\n"
       print ' > '.magenta
       dimensions = gets.chomp
     end
     puts "Great! You will be playing on boards with #{dimensions.split[0].to_i} rows and #{dimensions.split[2].to_i} columns".green
-    puts "\n"
     [dimensions.split[0].to_i, dimensions.split[2].to_i]
   end
 
 
   def self.get_ships(max_length)
+    puts "\n"
     puts "Pleaser enter a list of ships and their lengths that you would like to use for this game. You can create as many as you would like.".light_black.bold
+    puts "Note: Based on the dimensions you have given, the maximum ship length is #{max_length}".light_black.bold
     puts "Example: ShipA 5, ShipB 4, ShipC 7".light_black.italic
     ship_objects = []
     until ship_objects.length > 0
-      puts "\n"
       print ' > '.magenta
       choice = gets.chomp
       choice = choice.split(',')
@@ -149,7 +153,6 @@ class Game
       end
     end
     puts "Great! You have created #{ship_objects.length} ships!".green
-    puts "\n"
     ship_objects
   end
 
