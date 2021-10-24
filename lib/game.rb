@@ -22,6 +22,7 @@ class Game
   def place_ships(board, ships, ai)
     if ai #this trigger computer placement
       ships.each do |ship|
+
         # randomly choose starting cell.
         # Generate 4 possible cell arrays based on ship length
         # Check validity. Randomly choose one that works.
@@ -35,7 +36,7 @@ class Game
           possible_placements << create_cell_array(start_cell.coordinate, ship.length, "left")
           possible_placements << create_cell_array(start_cell.coordinate, ship.length, "right")
           valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
-          chosen_placement = valid_placements.sample(1)
+          chosen_placement = valid_placements.sample(1)[0] # without [0] it returns [[coordinates]] not [coordinates]
         end
         #place ship
         board.place(ship,chosen_placement)

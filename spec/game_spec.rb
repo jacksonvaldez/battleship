@@ -26,7 +26,7 @@ describe Game do
   describe ' #place_ship' do
     it 'places all ships' do
       @game.place_ships(@game.board_ai, @game.ships_ai, true)
-      expect(@game.board_ai.cells.values.find_all{|cell| cell.is_empty?}.length).to be < (@game.board_ai.cells.values)
+      expect(@game.board_ai.cells.values.find_all{|cell| cell.empty?}.length).to eq(16 - 5)
     end
   end
 
