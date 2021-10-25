@@ -28,8 +28,10 @@ describe Game do
       @game.human_user = ComputerUser.new(Board.new(@width, @height), @default_ships)
       expect(@game.human_user).to be_a(ComputerUser)
     end
-    xit 'updates ' do
-
+    it  'runs turns ' do
+      #@game.human_user = ComputerUser.new(Board.new(@width, @height), @default_ships)
+      require "pry"; binding.pry
+      @game.alternate_turns
     end
   end
 end

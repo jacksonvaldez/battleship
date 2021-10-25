@@ -6,8 +6,8 @@ require 'colorize' # gem install colorize in terminal if needed
 
 class Game
   #initialzie
-  attr_reader :turn_counter, :computer_user#, :human_user
-  attr_accessor :human_user
+  attr_reader :turn_counter, :computer_user, :human_user
+  #attr_accessor :human_user
 
 
   def initialize(dimensions, ships)
@@ -61,7 +61,9 @@ class Game
   def alternate_turns
     message_1 = nil
     message_2 = nil
+    puts" this got hit 1"
     until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
+      puts " this got hit 2"
       if @turn_counter.even? || @turn_counter == 0 # If its the players turn
         puts "\nSTEVE'S BOARD:".red.bold
         puts @computer_user.board.render(false)
@@ -84,12 +86,14 @@ class Game
         else
           message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
         end
+        puts @turn_counter
       else # If its not the players turn, then its the computers turn
         unfired_cells = @human_user.board.cells.values.find_all {|cell| cell.fired_upon? == false}
         chosen_cell = unfired_cells.sample
         @human_user.board.cells[chosen_cell.coordinate].fire_upon
         message_2 = "Steve has fired at cell #{chosen_cell.coordinate} on your board!".red
         @turn_counter += 1
+        puts @turn_counter
       end
     end
   end
