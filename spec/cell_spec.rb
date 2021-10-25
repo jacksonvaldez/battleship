@@ -41,14 +41,6 @@ describe Cell do
     end
   end
 
-  describe ' #fire_upon' do
-    it 'changes fired_upon to true' do
-      expect(@cell.fired_upon).to eq(false)
-      @cell.fire_upon
-      expect(@cell.fired_upon).to eq(true)
-    end
-  end
-
   describe ' #fired_upon?' do
     it 'returns false when cell has not been fired upon' do
       expect(@cell.fired_upon).to eq(false)
@@ -58,6 +50,14 @@ describe Cell do
       @cell.fire_upon
       expect(@cell.fired_upon).to eq(true)
       expect(@cell.fired_upon?).to eq(true)
+    end
+  end
+
+  describe ' #fire_upon' do
+    it 'changes fired_upon to true' do
+      expect(@cell.fired_upon).to eq(false)
+      @cell.fire_upon
+      expect(@cell.fired_upon).to eq(true)
     end
   end
 

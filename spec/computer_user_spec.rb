@@ -11,6 +11,9 @@ describe ComputerUser do
     @game = Game.new([@width, @height],@default_ships)
   end
 
+  # add init test
+  # add setup_board test
+
 
   describe ' #create_cell_array' do
     it 'creates coordinates in up direction' do

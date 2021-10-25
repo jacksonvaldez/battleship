@@ -17,4 +17,5 @@ describe Game do
     expect(@game.human_user).to be_a(HumanUser)
   end
 
+  # add test for starter message
 end

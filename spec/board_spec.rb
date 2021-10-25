@@ -48,7 +48,7 @@ describe Board do
     end
   end
 
-
+# leland to confirm
   describe ' #place' do
     it 'places a ship in the right cells if placement is valid' do
       @board.place(@cruiser,["A1", "B1", "C2"])
@@ -63,17 +63,6 @@ describe Board do
       expect(@board.cells["A1"].ship).to eq(@cruiser)
     end
   end
-
-
-  describe ' #cells' do
-    it 'returns nil if cell is not on board' do
-      expect(@board.cells["Z1"]).to eq(nil)
-    end
-    it 'returns the correct cell' do
-      expect(@board.cells["A1"].coordinate).to eq("A1")
-    end
-  end
-
 
   describe ' #render' do
     it 'returns correct string' do

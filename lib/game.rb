@@ -61,7 +61,6 @@ class Game
     message_2 = nil
     until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       if @turn_counter.even? || @turn_counter == 0 # If its the players turn
-        require 'pry'; binding.pry
         puts "\nSTEVE'S BOARD:".red.bold
         puts @computer_user.board.render(false)
         puts "\nYOUR BOARD:".red.bold
