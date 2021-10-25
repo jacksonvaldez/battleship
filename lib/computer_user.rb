@@ -19,21 +19,10 @@ class ComputerUser
       # randomly choose placement
       chosen_placement = random_placement(ship)
       #place ship
-      if chosen_placement.class == Array
+      if !(chosen_placement == nil)
         @board.place(ship,chosen_placement)
       else
-        failed = true
-      end
-    end
-    if failed
-      # return failure error and make human the winner
-      puts "Steve failed to setup his board properly. You Win!!"
-      puts "To make it easier for Steve, try again with a larger board or fewer ships."
-      # destroy all computer ships to trigger end of game
-      @ships.each do |ship|
-        while ship.health > 0 do
-          ship.hit
-        end
+        return @board = nil
       end
     end
   end

@@ -28,10 +28,10 @@ describe ComputerUser do
       @steve.setup_board
       expect(@steve.board.cells.values.find_all{|cell| cell.empty?}.length).to eq(16 - 5)
     end
-    it 'returns all sunken ships if board cannot be set up' do
+    it 'returns nil if setup failed' do
       @bad_steve = ComputerUser.new(Board.new(2, 2), @default_ships)
       @bad_steve.setup_board
-      expect(@bad_steve.ships.find_all{|ship| ship.sunk?}.length).to eq (2)
+      expect(@bad_steve.board).to eq(nil)
     end
   end
 
