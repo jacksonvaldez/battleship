@@ -1,20 +1,5 @@
 require './lib/cell'
-
-
-
-
-public # Allows the methods below to be accessed inside the Board class definition
-
-# Testing if every element in an array is the same. [1, 2, 3] --> false,    ['hi', 'hi', 'hi'] --> true
-def everything_same?(array)
-  array.uniq.length <= 1
-end
-
-# Testing if characters OR numbers in an array are sequential ['A', 'B', 'C'] --> true,  [1, 2, 3] --> true
-def is_sequential?(array)
-  array.sort!
-  (array.first..array.last).to_a == array
-end
+require './lib/array_methods'
 
 
 
@@ -23,7 +8,7 @@ class Board
 
   attr_reader :height, :width, :cells
 
-  def initialize(width, height)
+  def initialize(height, width)
     @height = height
     @width = width
     @cells = Hash.new()
@@ -57,6 +42,9 @@ class Board
     @cells.keys.include?(coordinate) && @cells[coordinate].empty?
   end
 
+  def valid_fire?(coordinate)
+    @cells.keys.include?(coordinate) && @cells[coordinate].fired_upon? == false
+  end
 
 
   # Tests if a ship placement is possible on the board
@@ -70,21 +58,23 @@ class Board
 
     def parse_numbers(strings)
       strings.map do |element|
-        element[1] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
+        element[1..2] # Each element is a string. Its returning a new array for the SECOND character of each string. ['A1', A2', 'A3'] --> ['1', '2', '3']
       end
     end
 
-    if ship.length == coordinates.length # Testing if the ship length is the same length as the coordinates given
-      coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
-        if !self.valid_coordinate?(coordinate)
-          return false
-        end
+    if !(ship.length == coordinates.length) # Testing if the ship length is the same length as the coordinates given, and if there are more than 2 coordinates given
+      return false
+    end
+
+    coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
+      if !self.valid_coordinate?(coordinate)
+        return false
       end
     end
 
-    if self.everything_same?(parse_letters(coordinates)) && self.is_sequential?(parse_numbers(coordinates)) # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
+    if parse_letters(coordinates).everything_same? && parse_numbers(coordinates).is_sequential? # If all the numbers in each coordinate is sequential AND If all the coordinates start with the same letter
       return true # Add code here that tests for overlapping ships
-    elsif self.everything_same?(parse_numbers(coordinates)) && self.is_sequential?(parse_letters(coordinates)) # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
+    elsif parse_numbers(coordinates).everything_same? && parse_letters(coordinates).is_sequential? # If all the letters in each coordinate is sequential AND If all the coordinates end with the same number
       return true # Add code here that tests for overlapping ships
     else
       return false
@@ -96,9 +86,8 @@ class Board
   # place ship
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
-      coordinates.each do |coordinate|
-        @cells[coordinate].place_ship(ship)
-      end
+      coordinates.each { |coordinate| @cells[coordinate].place_ship(ship) }
+      return true #returns true if the placement was successful
     end
   end
 
@@ -112,11 +101,19 @@ class Board
     # generate the first row
     first_row = (1..@width).to_a # create array of numbers based on width
     first_row = first_row.map do |element| # change each number in array to a string of that number
-      element.to_s
+      element.to_s[0]
     end
+    second_row = (1..@width).to_a # create array of numbers based on width
+    second_row = second_row.map do |element| # change each number in array to a string of that number
+      if element.to_s[1].class == String
+        element.to_s[1]
+      end
+    end
+
     # add first row to print_text
     # prepend white space and append newline to first row, then shovel into print_text
     print_text << first_row.unshift(" ").push("\n").join(" ")
+    print_text << "           " + second_row.join(" ") + "\n"
 
     # iterate through each "row" of the cells array
     @cells.values.each_slice(@width).with_index(0) do |row, counter|
@@ -128,6 +125,43 @@ class Board
       print_text << cell_text.unshift(letters[counter]).push("\n").join(" ")
     end
     print_text = print_text.join()
+  end
+
+  def fits?(ship_length)
+    alphabet = ('A'..'Z').to_a
+    counter_1 = 0
+    counter_2 = 0
+    @height.times do |h|
+      @width.times do |w|
+        if counter_1 >= ship_length
+          return true
+        elsif @cells["#{alphabet[h]}#{w + 1}"].empty?
+          counter_1 += 1
+        else
+          counter_1 = 0
+        end
+        # at the end of the loop, reset the counter before starting next row.
+        if counter_1 > @width
+          counter_1 = 0
+        end
+      end
+    end
+    @width.times do |w|
+      @height.times do |h|
+        if counter_2 >= ship_length
+          return true
+        elsif @cells["#{alphabet[h]}#{w + 1}"].empty?
+          counter_2 += 1
+        else
+          counter_2 = 0
+        end
+        # at the end of the loop, reset the counter before starting next row.
+        if counter_2 > @height
+          counter_2 = 0
+        end
+      end
+    end
+    return false
   end
 
 end
