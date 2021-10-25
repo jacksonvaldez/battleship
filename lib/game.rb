@@ -58,20 +58,31 @@ class Game
 
 
   def alternate_turns
-    until @computer_user.ships
-    end
-    if @turn_counter.even? || @turn_counter == 0 # If its the players turn
-      puts "Computer Player Board:"
-      puts @computer_user.board.render(false)
-      puts "Your Board:"
-      puts @human_user.board.render(true)
-      puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
-      print ' > '.magenta
-      choice = gets.chomp
-
-
-    else # If its not the players turn, then its the computers turn
-      puts "Steve is taking his turn..."
+    until @computer_user.ships.sum { |ship| ship.health } == 0 || @human_user.ships.sum { |ship| ship.health } == 0
+      if @turn_counter.even? || @turn_counter == 0 # If its the players turn
+        puts "Computer Player Board:"
+        puts @computer_user.board.render(false)
+        puts "Your Board:"
+        puts @human_user.board.render(true)
+        puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
+        print ' > '.magenta
+        choice = gets.chomp
+        choice.delete(' ')
+        if @computer_user.board.cells.values[choice].empty?
+          @computer_user.board.cells[choice].fire_upon
+          puts "You have fired at Steve's board!".yellow
+          @turn_counter += 1
+        else
+          puts "Invalid Input! You either already fired here or the given coordinate does not exist.".red
+        end
+      else # If its not the players turn, then its the computers turn
+        require 'pry'; binding.pry
+        empty_cells = @human_user.board.cells.values.find_all {|cell| cell.empty?}
+        empty_cell = empty_cells.sample
+        @human_user.board.cells[empty_cell.coordinate].fire_upon
+        puts "Steve has fired at #{empty_cell.coordinate} on your board!".red
+        @turn_counter += 1
+      end
     end
   end
 
