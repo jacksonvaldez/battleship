@@ -61,9 +61,7 @@ class Game
   def alternate_turns
     message_1 = nil
     message_2 = nil
-    puts" this got hit 1"
     until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
-      puts " this got hit 2"
       if @turn_counter.even? || @turn_counter == 0 # If its the players turn
         puts "\nSTEVE'S BOARD:".red.bold
         puts @computer_user.board.render(false)
@@ -177,10 +175,15 @@ class Game
     puts "Pleaser enter a list of ships and their lengths that you would like to use for this game. You can create as many as you would like.".light_black.bold
     puts "Note: Based on the dimensions you have given, the maximum ship length is #{max_length}".light_black.bold
     puts "Example: ShipA 5, ShipB 4, ShipC 7".light_black.italic
+    puts "Alternatively, type 'default' to use standard Battleship ship types".light_black.italic
     ship_objects = []
     until ship_objects.length > 0
       print ' > '.magenta
       choice = gets.chomp
+      if choice == 'default'
+        ship_objects = [Ship.new("Destroyer", 2), Ship.new("Cruiser", 3), Ship.new("Submarine", 3), Ship.new("Battleship", 4), Ship.new("Carrier", 5)]
+        break
+      end
       choice = choice.split(',')
       choice = choice.find_all{|ship| ship.split.length == 2 && ship.split[1].to_i <= max_length && ship.split[1].to_i >= 2 }
       choice = choice.map{|ship| ship_objects.push(Ship.new(ship.split[0], ship.split[1].to_i))}
