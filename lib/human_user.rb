@@ -7,12 +7,9 @@ class HumanUser
     @ships = ships
   end
 
-  def take_turn
-
-  end
-
   def setup_board
     loop = true
+    message = nil
     unplaced_ships = @ships.map { |ship| ship}
     until loop == false
       if unplaced_ships.length == 0
@@ -24,6 +21,7 @@ class HumanUser
       puts @board.render(true)
       puts "AVAILABLE SHIPS:".yellow.bold
       unplaced_ships.each{|ship| puts " * #{ship.name}: #{ship.length}".yellow}
+      puts message
       puts "\nPlease place one of the ships from the following listed on your board.".light_black.bold
       puts "Put 'finish' when you are done.".light_black.bold
       puts "Example: ShipName A1 A2 A3".light_black.italic
@@ -37,10 +35,9 @@ class HumanUser
         if ship_choice.class == Ship && @board.valid_placement?(ship_choice, coordinates) && coordinates.length >= 2
           @board.place(ship_choice, coordinates)
           unplaced_ships.reject!{|ship| ship_choice.name == ship.name}
-          puts "Ship placed successfully!".green
+          message =  "Ship placed successfully!".green
         else
-          puts "Invalid Input! Make sure the coordinates form a".red
-          puts "straight line and don't overlap any other ships.".red
+          message = "Invalid Input! Make sure the coordinates form a\nstraight line and don't overlap any other ships.".red
         end
         loop = true
       else

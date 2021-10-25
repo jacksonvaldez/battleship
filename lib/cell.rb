@@ -1,4 +1,5 @@
 require './lib/ship'
+require 'colorize'
 
 class Cell
   attr_reader :coordinate, :fired_upon, :ship
@@ -43,13 +44,13 @@ class Cell
     elsif !fired_upon? && !empty? && show == false
       "." # ship exists, but don't show it
     elsif !fired_upon? && !empty? && show == true
-      "S" # Ship
+      "S".green.bold # Ship
     elsif fired_upon? && empty?
-      "M" # Missed
+      "M".red.bold # Missed
     elsif fired_upon? && !empty? && !ship.sunk?
-      "H" # Hit
+      "H".blue.bold # Hit
     else fired_upon? && !empty? && ship.sunk?
-      "X" # Sunken Ship
+      "X".cyan.bold # Sunken Ship
     end
   end
 end

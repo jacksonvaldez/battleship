@@ -34,7 +34,6 @@ class Game
 
     # STAGE 3: Game asks the user and Steve to setup their boards
     game.setup_boards
-    require 'pry'; binding.pry
 
     # STAGE 4: Game asks the user and Steve to take turns back and forth until someone has no more ships
     game.alternate_turns
@@ -58,29 +57,37 @@ class Game
 
 
   def alternate_turns
-    until @computer_user.ships.sum { |ship| ship.health } == 0 || @human_user.ships.sum { |ship| ship.health } == 0
+    message_1 = nil
+    message_2 = nil
+    until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       if @turn_counter.even? || @turn_counter == 0 # If its the players turn
-        puts "Computer Player Board:"
+        require 'pry'; binding.pry
+        puts "\nSTEVE'S BOARD:".red.bold
         puts @computer_user.board.render(false)
-        puts "Your Board:"
+        puts "\nYOUR BOARD:".red.bold
         puts @human_user.board.render(true)
+        puts message_1
+        puts message_2
         puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
+        puts "S = ship, M = miss, H = hit, X = sunken".cyan
         print ' > '.magenta
         choice = gets.chomp
-        choice.delete(' ')
-        if @computer_user.board.cells.values[choice].empty?
+        choice.delete!(' ')
+        if choice == 'end'
+          break
+        end
+        if @computer_user.board.valid_fire?(choice)
           @computer_user.board.cells[choice].fire_upon
-          puts "You have fired at Steve's board!".yellow
+          message_1 = "You have fired at cell #{choice} on Steve's board!".yellow
           @turn_counter += 1
         else
-          puts "Invalid Input! You either already fired here or the given coordinate does not exist.".red
+          message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
         end
       else # If its not the players turn, then its the computers turn
-        require 'pry'; binding.pry
-        empty_cells = @human_user.board.cells.values.find_all {|cell| cell.empty?}
-        empty_cell = empty_cells.sample
-        @human_user.board.cells[empty_cell.coordinate].fire_upon
-        puts "Steve has fired at #{empty_cell.coordinate} on your board!".red
+        unfired_cells = @human_user.board.cells.values.find_all {|cell| cell.fired_upon? == false}
+        chosen_cell = unfired_cells.sample
+        @human_user.board.cells[chosen_cell.coordinate].fire_upon
+        message_2 = "Steve has fired at cell #{chosen_cell.coordinate} on your board!".red
         @turn_counter += 1
       end
     end

@@ -42,6 +42,9 @@ class Board
     @cells.keys.include?(coordinate) && @cells[coordinate].empty?
   end
 
+  def valid_fire?(coordinate)
+    @cells.keys.include?(coordinate) && @cells[coordinate].fired_upon? == false
+  end
 
 
   # Tests if a ship placement is possible on the board
