@@ -34,6 +34,9 @@ class Game
 
     # STAGE 3: Game asks the user and Steve to setup their boards
     game.setup_boards
+    if (game.computer_user.board == nil) || (game.human_user.board == nil)
+      game.end_game
+    end
 
     # STAGE 4: Game asks the user and Steve to take turns back and forth until someone has no more ships
     game.alternate_turns
@@ -90,9 +93,19 @@ class Game
         @turn_counter += 1
       end
     end
+    game.end_game
   end
 
-
+  def end_game
+    if @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
+      loser = 'Steve'
+    elsif @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
+      loser = 'You'
+    else
+      loser = "No one"
+    end
+    puts "#{loser} loses after #{turn_counter} turns!"
+  end
 
   def self.starter_message
     text = File.new('./txt_files/starter_message.txt').read
