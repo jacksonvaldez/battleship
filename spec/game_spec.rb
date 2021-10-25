@@ -23,5 +23,13 @@ describe Game do
     end
   end
 
-  # add test for starter message
+  describe ' #alternate turns' do
+    xit "creates two computer players" do
+      @game.human_user = ComputerUser.new(Board.new(@width, @height), @default_ships)
+      expect(@game.human_user).to be_a(ComputerUser)
+    end
+    xit 'updates ' do
+
+    end
+  end
 end

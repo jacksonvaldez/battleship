@@ -6,7 +6,8 @@ require 'colorize' # gem install colorize in terminal if needed
 
 class Game
   #initialzie
-  attr_reader :turn_counter, :computer_user, :human_user
+  attr_reader :turn_counter, :computer_user#, :human_user
+  attr_accessor :human_user
 
 
   def initialize(dimensions, ships)
@@ -42,9 +43,7 @@ class Game
     game.alternate_turns
 
     # STAGE 5: Game ends itself and announces the winner
-    # if self.end_game == false
-    #   return nil
-    # end
+    game.end_game
 
 
 
@@ -93,7 +92,6 @@ class Game
         @turn_counter += 1
       end
     end
-    game.end_game
   end
 
   def end_game
