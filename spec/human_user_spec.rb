@@ -7,7 +7,7 @@ describe HumanUser do
     @default_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
     @width = 4
     @height = 4
-    @game = Game.new([@width, @height],@default_ships)
+    @game = Game.new([@height, @width],@default_ships)
   end
 
   it 'exists' do
