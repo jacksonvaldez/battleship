@@ -84,18 +84,18 @@ describe Board do
     end
     it 'prints a board with a ship' do
       @board.place(@cruiser, ["A1", "A2", "A3"])
-      expect(@board.render(true)).to eq("  1 2 3 4 5 \n               \nA S S S . . \nB . . . . . \nC . . . . . \n")
+      expect(@board.render(true)).to eq("  1 2 3 4 5 \n               \nA \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m . . \nB . . . . . \nC . . . . . \n")
       @board.place(@sub, ["B2", "C2"])
-      expect(@board.render(true)).to eq("  1 2 3 4 5 \n               \nA S S S . . \nB . S . . . \nC . S . . . \n")
+      expect(@board.render(true)).to eq("  1 2 3 4 5 \n               \nA \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m . . \nB . \e[1;32;49mS\e[0m . . . \nC . \e[1;32;49mS\e[0m . . . \n")
       expect(@board.render).to eq("  1 2 3 4 5 \n               \nA . . . . . \nB . . . . . \nC . . . . . \n")
     end
 
     it 'renders correct board of different shape' do
       board2 = Board.new(4, 5)
       board2.place(@cruiser, ["A1", "A2", "A3"])
-      expect(board2.render(true)).to eq("  1 2 3 4 5 \n               \nA S S S . . \nB . . . . . \nC . . . . . \nD . . . . . \n")
+      expect(board2.render(true)).to eq("  1 2 3 4 5 \n               \nA \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m . . \nB . . . . . \nC . . . . . \nD . . . . . \n")
       board2.place(@sub, ["B2", "C2"])
-      expect(board2.render(true)).to eq("  1 2 3 4 5 \n               \nA S S S . . \nB . S . . . \nC . S . . . \nD . . . . . \n")
+      expect(board2.render(true)).to eq("  1 2 3 4 5 \n               \nA \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m . . \nB . \e[1;32;49mS\e[0m . . . \nC . \e[1;32;49mS\e[0m . . . \nD . . . . . \n")
       expect(board2.render).to eq("  1 2 3 4 5 \n               \nA . . . . . \nB . . . . . \nC . . . . . \nD . . . . . \n")
     end
 

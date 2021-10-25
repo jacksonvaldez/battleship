@@ -72,18 +72,18 @@ describe Cell do
     end
     it 'returns "S" if fired_upon == false, ship == Ship and render == true' do
       @cell.place_ship(@ship)
-      expect(@cell.render(true)).to eq("S")
+      expect(@cell.render(true)).to eq("\e[1;32;49mS\e[0m") # S
     end
     it 'returns "M" if fired_upon == true, ship == nil and ship != sunk' do
       @cell.fire_upon
-      expect(@cell.render(true)).to eq("M")
-      expect(@cell.render).to eq("M")
+      expect(@cell.render(true)).to eq("\e[1;31;49mM\e[0m") # M
+      expect(@cell.render).to eq("\e[1;31;49mM\e[0m") # M
     end
     it 'returns "H" if fired_upon == true, ship == Ship and ship != sunk' do
       @cell.place_ship(@ship)
       @cell.fire_upon
-      expect(@cell.render(true)).to eq("H")
-      expect(@cell.render).to eq("H")
+      expect(@cell.render(true)).to eq("\e[1;34;49mH\e[0m") # H
+      expect(@cell.render).to eq("\e[1;34;49mH\e[0m") # H
     end
     it 'returns X if fired_upon == true and ship == Ship and ship == sunk' do
       @cell.place_ship(@ship)
@@ -93,8 +93,8 @@ describe Cell do
       end
       @cell.fire_upon
       expect(@cell.ship.sunk?).to eq(true)
-      expect(@cell.render(true)).to eq("X")
-      expect(@cell.render).to eq("X")
+      expect(@cell.render(true)).to eq("\e[1;36;49mX\e[0m") # X
+      expect(@cell.render).to eq("\e[1;36;49mX\e[0m") # X
     end
   end
 end
