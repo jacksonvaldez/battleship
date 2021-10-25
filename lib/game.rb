@@ -151,18 +151,24 @@ class Game
 
   def self.get_dimensions
     puts "\n"
-    puts "Please choose the board dimensions (rows x columns).".light_black.bold
+    puts "Please choose the board dimensions (rows x columns), or type 'default' for standard Battleship board size.".light_black.bold
     puts "Example: 15 x 20".light_black.italic
+    puts "Example: default".light_black.italic
     print ' > '.magenta
     dimensions = gets.chomp
-    while !(dimensions.split.length == 3 && dimensions.split[0].to_i <= 26 && dimensions.split[0].to_i >= 4 && dimensions.split[1] == 'x' && dimensions.split[2].to_i <= 26 && dimensions.split[2].to_i >= 4)
-      puts "Invalid Input. Example: 15 x 20".red
-      puts "Hint: maximum dimension is 26. minimum dimension is 4".red
-      print ' > '.magenta
-      dimensions = gets.chomp
+    dimensions = dimensions.gsub(/\s+/, "").downcase
+    if dimensions == 'default'
+      dimensions = '10x10'
+    else
+      while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
+        puts "Invalid Input. Example: 15 x 20".red
+        puts "Hint: maximum dimension is 26. minimum dimension is 4".red
+        print ' > '.magenta
+        dimensions = gets.chomp
+      end
     end
-    puts "Great! You will be playing on boards with #{dimensions.split[0].to_i} rows and #{dimensions.split[2].to_i} columns".green
-    [dimensions.split[0].to_i, dimensions.split[2].to_i]
+    puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green
+    [dimensions.split('x')[0].to_i, dimensions.split('x')[1].to_i]
   end
 
 
