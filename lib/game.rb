@@ -7,11 +7,13 @@ require 'colorize' # gem install colorize in terminal if needed
 class Game
   #initialzie
   attr_reader :turn_counter, :computer_user, :human_user
+  #attr_accessor :human_user
 
 
   def initialize(dimensions, ships)
+    ships_2 = ships.map(&:clone)
     @computer_user = ComputerUser.new(Board.new(dimensions[0], dimensions[1]), ships)
-    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships)
+    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships_2)
     @turn_counter = 0
   end
 
@@ -42,9 +44,7 @@ class Game
     game.alternate_turns
 
     # STAGE 5: Game ends itself and announces the winner
-    # if self.end_game == false
-    #   return nil
-    # end
+    game.end_game
 
 
 
@@ -75,12 +75,23 @@ class Game
         print ' > '.magenta
         choice = gets.chomp
         choice.delete!(' ')
+        choice = choice.upcase
         if choice == 'end'
           break
         end
         if @computer_user.board.valid_fire?(choice)
           @computer_user.board.cells[choice].fire_upon
-          message_1 = "You have fired at cell #{choice} on Steve's board!".yellow
+          # return correct message depending on the result
+          result = @computer_user.board.cells[choice].render
+          if result == "\e[1;31;49mM\e[0m"
+            message_1 = "Cell #{choice} is a miss!!".yellow
+          elsif result == "\e[1;34;49mH\e[0m"
+            message_1 = "Cell #{choice} is a hit!!".yellow
+          elsif result == "\e[1;36;49mX\e[0m"
+            message_1 = "Cell #{choice} is a hit!! You sunk Steve's #{@computer_user.board.cells[choice].ship.name}!! (length = #{@computer_user.board.cells[choice].ship.length})".yellow
+          else
+            message_1 = "You have fired at cell #{choice} on Steve's board but it didn't result in a hit, miss or sinking. Something's not right!".yellow
+          end
           @turn_counter += 1
         else
           message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
@@ -93,11 +104,14 @@ class Game
         @turn_counter += 1
       end
     end
-    game.end_game
   end
 
   def end_game
-    if @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
+    if (@computer_user.board == nil) || (@human_user.board == nil)
+      loser = "No one"
+      puts "Board failed to set up. Try using a larger board or fewer ships."
+      # put something here to stop the rest of game.start_game.
+    elsif @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'Steve'
     elsif @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'You'
@@ -149,18 +163,24 @@ class Game
 
   def self.get_dimensions
     puts "\n"
-    puts "Please choose the board dimensions (rows x columns).".light_black.bold
+    puts "Please choose the board dimensions (rows x columns), or type 'default' for standard Battleship board size.".light_black.bold
     puts "Example: 15 x 20".light_black.italic
+    puts "Example: default".light_black.italic
     print ' > '.magenta
     dimensions = gets.chomp
-    while !(dimensions.split.length == 3 && dimensions.split[0].to_i <= 26 && dimensions.split[0].to_i >= 4 && dimensions.split[1] == 'x' && dimensions.split[2].to_i <= 26 && dimensions.split[2].to_i >= 4)
-      puts "Invalid Input. Example: 15 x 20".red
-      puts "Hint: maximum dimension is 26. minimum dimension is 4".red
-      print ' > '.magenta
-      dimensions = gets.chomp
+    dimensions = dimensions.gsub(/\s+/, "").downcase
+    if dimensions == 'default'
+      dimensions = '10x10'
+    else
+      while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
+        puts "Invalid Input. Example: 15 x 20".red
+        puts "Hint: maximum dimension is 26. minimum dimension is 4".red
+        print ' > '.magenta
+        dimensions = gets.chomp
+      end
     end
-    puts "Great! You will be playing on boards with #{dimensions.split[0].to_i} rows and #{dimensions.split[2].to_i} columns".green
-    [dimensions.split[0].to_i, dimensions.split[2].to_i]
+    puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green
+    [dimensions.split('x')[0].to_i, dimensions.split('x')[1].to_i]
   end
 
 
@@ -169,10 +189,15 @@ class Game
     puts "Pleaser enter a list of ships and their lengths that you would like to use for this game. You can create as many as you would like.".light_black.bold
     puts "Note: Based on the dimensions you have given, the maximum ship length is #{max_length}".light_black.bold
     puts "Example: ShipA 5, ShipB 4, ShipC 7".light_black.italic
+    puts "Alternatively, type 'default' to use standard Battleship ship types".light_black.italic
     ship_objects = []
     until ship_objects.length > 0
       print ' > '.magenta
       choice = gets.chomp
+      if choice == 'default'
+        ship_objects = [Ship.new("Destroyer", 2), Ship.new("Cruiser", 3), Ship.new("Submarine", 3), Ship.new("Battleship", 4), Ship.new("Carrier", 5)]
+        break
+      end
       choice = choice.split(',')
       choice = choice.find_all{|ship| ship.split.length == 2 && ship.split[1].to_i <= max_length && ship.split[1].to_i >= 2 }
       choice = choice.map{|ship| ship_objects.push(Ship.new(ship.split[0], ship.split[1].to_i))}
