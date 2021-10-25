@@ -6,7 +6,7 @@ describe Board do
   before(:each) do
     @cruiser = Ship.new('Cruiser', 3)
     @sub = Ship.new('Submarine', 2)
-    @board = Board.new(3, 5)
+    @board = Board.new(5, 3)
   end
 
 
@@ -79,7 +79,7 @@ describe Board do
     end
 
     it 'renders correct board of different shape' do
-      board2 = Board.new(4, 5)
+      board2 = Board.new(5, 4)
       board2.place(@cruiser, ["A1", "A2", "A3"])
       expect(board2.render(true)).to eq("  1 2 3 4 5 \n               \nA \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m \e[1;32;49mS\e[0m . . \nB . . . . . \nC . . . . . \nD . . . . . \n")
       board2.place(@sub, ["B2", "C2"])

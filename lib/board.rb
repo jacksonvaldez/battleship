@@ -8,7 +8,7 @@ class Board
 
   attr_reader :height, :width, :cells
 
-  def initialize(height, width)
+  def initialize(width, height)
     @height = height
     @width = width
     @cells = Hash.new()
