@@ -48,7 +48,6 @@ describe Board do
     end
   end
 
-# leland to confirm
   describe ' #place' do
     it 'places a ship in the right cells if placement is valid' do
       @board.place(@cruiser,["A1", "B1", "C2"])
