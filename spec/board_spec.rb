@@ -90,4 +90,15 @@ describe Board do
 
   end
 
+  describe ' #fits?' do
+    it 'returns true if ship fits' do
+      board1 = Board.new(3,3)
+      expect(board1.fits?(3)).to eq(true)
+    end
+    it 'returns false if ship does not fit' do
+      board2 = Board.new(2,2)
+      expect(board2.fits?(3)).to eq(false)
+    end
+  end
+
 end

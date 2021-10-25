@@ -140,6 +140,10 @@ class Board
         else
           counter_1 = 0
         end
+        # at the end of the loop, reset the counter before starting next row.
+        if counter_1 > @width
+          counter_1 = 0
+        end
       end
     end
     @width.times do |w|
@@ -149,6 +153,10 @@ class Board
         elsif @cells["#{alphabet[h]}#{w + 1}"].empty?
           counter_2 += 1
         else
+          counter_2 = 0
+        end
+        # at the end of the loop, reset the counter before starting next row.
+        if counter_2 > @height
           counter_2 = 0
         end
       end
