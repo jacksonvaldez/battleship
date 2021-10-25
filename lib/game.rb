@@ -79,25 +79,37 @@ class Game
         end
         if @computer_user.board.valid_fire?(choice)
           @computer_user.board.cells[choice].fire_upon
-          message_1 = "You have fired at cell #{choice} on Steve's board!".yellow
+          # return correct message depending on the result
+          result = @computer_user.board.cells[choice].render
+          if result == "\e[1;31;49mM\e[0m"
+            message_1 = "Cell #{choice} is a miss!!".yellow
+          elsif result == "\e[1;34;49mH\e[0m"
+            message_1 = "Cell #{choice} is a hit!!".yellow
+          elsif result == "\e[1;36;49mX\e[0m"
+            message_1 = "Cell #{choice} is a hit!! You sunk Steve's #{@computer_user.board.cells[choice].ship.name}!! (length = #{@computer_user.board.cells[choice].ship.length})".yellow
+          else
+            message_1 = "You have fired at cell #{choice} on Steve's board but it didn't result in a hit, miss or sinking. Something's not right!".yellow
+          end
           @turn_counter += 1
         else
           message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
         end
-        puts @turn_counter
       else # If its not the players turn, then its the computers turn
         unfired_cells = @human_user.board.cells.values.find_all {|cell| cell.fired_upon? == false}
         chosen_cell = unfired_cells.sample
         @human_user.board.cells[chosen_cell.coordinate].fire_upon
         message_2 = "Steve has fired at cell #{chosen_cell.coordinate} on your board!".red
         @turn_counter += 1
-        puts @turn_counter
       end
     end
   end
 
   def end_game
-    if @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
+    if (@computer_user.board == nil) || (@human_user.board == nil)
+      loser = "No one"
+      puts "Board failed to set up. Try using a larger board or fewer ships."
+      # put something here to stop the rest of game.start_game.
+    elsif @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'Steve'
     elsif @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'You'
