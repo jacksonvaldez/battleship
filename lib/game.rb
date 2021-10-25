@@ -11,8 +11,9 @@ class Game
 
 
   def initialize(dimensions, ships)
+    ships_2 = ships.map(&:clone)
     @computer_user = ComputerUser.new(Board.new(dimensions[0], dimensions[1]), ships)
-    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships)
+    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships_2)
     @turn_counter = 0
   end
 
@@ -74,6 +75,7 @@ class Game
         print ' > '.magenta
         choice = gets.chomp
         choice.delete!(' ')
+        choice = choice.upcase
         if choice == 'end'
           break
         end
