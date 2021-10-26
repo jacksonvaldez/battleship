@@ -154,43 +154,48 @@ class User
     end
   end
 
-  def hunt(mode) #returns chosen cell coordinate
+  def hunt(board, ships, mode) #returns chosen cell coordinate
     if mode == "random"
-      unfired_cells = self.board.cells.values.find_all {|cell| cell.fired_upon? == false}
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
       chosen_coordinate = unfired_cells.sample.coordinate
     elsif mode == "probability"
-      self.update_possible_ships
+      self.update_possible_ships(board, ships)
       # find most highest # of ships
-      max = @board.cells.values.map{|cell| cell.possible_ships}.max
+      max = board.cells.values.map{|cell| cell.possible_ships}.max
       # gather all cells with this value
-      possible_targets = @board.cells.values.find_all{|cell| cell.possible_ships == max}
+      possible_targets = board.cells.values.find_all{|cell| cell.possible_ships == max}
       # randomly select from possible target
       chosen_coordinate = possible_targets.sample(1)[0].coordinate
     end
   end
 
-  def update_possible_ships # this belongs in board
+  def update_possible_ships(board, ships) # this belongs in board
     # reset @possible_chip counter in all cells
-    @board.cells.values.each{|cell| cell.possible_ships = 0}
+    board.cells.values.each{|cell| cell.possible_ships = 0}
     # loop through all cells
-    @board.cells.values.each do |cell|
-      # loops through all ships
-      @ships.each do |ship|
+    board.cells.values.each do |cell|
+      # loops through all unsunken ships
+      unsunken_ships = ships.find_all{|ship| !(ship.sunk?)}
+      unsunken_ships.each do |ship|
         # generate all possible arrangements per ship per starting cell
         possible_placements = []
         valid_placements = []
         #only down and right are needed, not up and left, because we are testing every cell.
-        # Left from one cell becomes right from another cell, duplicating true placements. 
+        # Left from one cell becomes right from another cell, duplicating true placements.
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "down")
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "right")
         # check validity, return valid placements
-        valid_placements = possible_placements.find_all{|placement| @board.valid_placement?(ship, placement)}
-        # loop through each valid placement
-        valid_placements.each do |valid_placement|
-          # loop through each coordinate to gather each cell in the valid placement
-          valid_placement.each do |coordinate|
-            # get cell at coordiante and increase the possible_ships counter of that cell by one
-            @board.cells[coordinate].possible_ships += 1
+        valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
+
+        # if valid placements exist update possible_ships, otherwise move on
+        if valid_placements.length > 0
+          # loop through each valid placement
+          valid_placements.each do |valid_placement|
+            # loop through each coordinate to gather each cell in the valid placement
+            valid_placement.each do |coordinate|
+              # get cell at coordiante and increase the possible_ships counter of that cell by one
+              @board.cells[coordinate].possible_ships += 1
+            end
           end
         end
       end

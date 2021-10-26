@@ -96,10 +96,9 @@ class Game
           message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
         end
       else # If its not the players turn, then its the computers turn
-        unfired_cells = @human_user.board.cells.values.find_all {|cell| cell.fired_upon? == false}
-        chosen_cell = unfired_cells.sample
-        @human_user.board.cells[chosen_cell.coordinate].fire_upon
-        message_2 = "Steve has fired at cell #{chosen_cell.coordinate} on your board!".red
+        chosen_coordinate = @computer_user.hunt(@human_user.board, @human_user.ships, "probability")
+        @human_user.board.cells[chosen_coordinate].fire_upon
+        message_2 = "Steve has fired at cell #{chosen_coordinate} on your board!".red
         @turn_counter += 1
       end
     end
