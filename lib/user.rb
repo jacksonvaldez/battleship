@@ -179,9 +179,9 @@ class User
         # generate all possible arrangements per ship per starting cell
         possible_placements = []
         valid_placements = []
-        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "up")
+        #only down and right are needed, not up and left, because we are testing every cell.
+        # Left from one cell becomes right from another cell, duplicating true placements. 
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "down")
-        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "left")
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "right")
         # check validity, return valid placements
         valid_placements = possible_placements.find_all{|placement| @board.valid_placement?(ship, placement)}
