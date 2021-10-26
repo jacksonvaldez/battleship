@@ -127,6 +127,42 @@ class Board
     print_text = print_text.join()
   end
 
+  # this is start of render probability method
+  def render_probability_map(show = false)
+    # gather working variables and aggregators
+    letters = ('A'..'Z').to_a[0..(@height -1)]
+    print_text =[]
+
+    # generate the first row
+    first_row = (1..@width).to_a # create array of numbers based on width
+    first_row = first_row.map do |element| # change each number in array to a string of that number
+      element.to_s[0]
+    end
+    second_row = (1..@width).to_a # create array of numbers based on width
+    second_row = second_row.map do |element| # change each number in array to a string of that number
+      if element.to_s[1].class == String
+        element.to_s[1]
+      end
+    end
+
+    # add first row to print_text
+    # prepend white space and append newline to first row, then shovel into print_text
+    print_text << first_row.unshift(" ").push("\n").join(" ")
+    print_text << "           " + second_row.join(" ") + "\n"
+
+    # iterate through each "row" of the cells array
+    @cells.values.each_slice(@width).with_index(0) do |row, counter|
+      # iterate through each cell in row to return the render string (S, ., M etc.)
+      cell_text = row.map do |cell|
+        cell.possible_ships.to_s
+      end
+      # prepend row letter, append newline, join with space, then shovel to print)text array.
+      print_text << cell_text.unshift(letters[counter]).push("\n").join(" ")
+    end
+    print_text = print_text.join()
+  end
+
+
   def fits?(ship_length)
     alphabet = ('A'..'Z').to_a
     counter_1 = 0
