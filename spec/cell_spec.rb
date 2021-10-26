@@ -23,6 +23,16 @@ describe Cell do
     expect(@cell.fired_upon).to eq(false)
   end
 
+  it 'initializes with possible_ships = 0' do
+    expect(@cell.possible_ships).to eq(0)
+  end
+
+  it 'can overwrite possible_ships' do
+    @cell.possible_ships += 1
+    @cell.possible_ships += 1
+    expect(@cell.possible_ships).to eq(2)
+  end
+
   describe ' #place_ship' do
     it 'adds ship object' do
       @cell.place_ship(@ship)
