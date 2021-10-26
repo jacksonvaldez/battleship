@@ -3,12 +3,14 @@ require 'colorize'
 
 class Cell
   attr_reader :coordinate, :fired_upon, :ship
+  attr_accessor :possible_ships
 
   #initialize cell with coordinate name and empty ship
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
     @fired_upon = false
+    @possible_ships = 0
   end
 
   # method to add ship object - return ship object or nil
