@@ -25,12 +25,37 @@ describe Board do
   end
 
 
-  describe '#valid_coordinate?' do
+  describe ' #valid_coordinate?' do
     it 'returns true if coordinate is valid' do
       expect(@board.valid_coordinate?('B3')).to eq(true)
     end
     it 'returns false if coordinate is invalid' do
       expect(@board.valid_coordinate?('J3')).to eq(false)
+    end
+    it 'when opponent_board = true: returns false if coordinate is invalid' do
+      expect(@board.valid_coordinate?('J3', true)).to eq(false)
+    end
+    it 'when opponent_board = true: returns true if coordinate is valid and empty' do
+      expect(@board.valid_coordinate?('B3', true)).to eq(true)
+    end
+    it 'when opponent_board = true: returns true if coordinate is valid and has an unseen ship ' do
+      @board.place(@sub, ['B2','B3'])
+      expect(@board.valid_coordinate?('B3', true)).to eq(true)
+    end
+    it 'when opponent_board = true: returns true if coordinate is valid and has a hit ship ' do
+      @board.place(@sub, ['B2','B3'])
+      @board.cells['B3'].fire_upon
+      expect(@board.valid_coordinate?('B3', true)).to eq(true)
+    end
+    it 'when opponent_board = true: returns false if coordinate is valid and has a sunk ship ' do
+      @board.place(@sub, ['B2','B3'])
+      @board.cells['B2'].fire_upon
+      @board.cells['B3'].fire_upon
+      expect(@board.valid_coordinate?('B3', true)).to eq(false)
+    end
+    it 'when opponent_board = true: returns false if coordinate is valid and has a miss ' do
+      @board.cells['B3'].fire_upon
+      expect(@board.valid_coordinate?('B3', true)).to eq(false)
     end
   end
 
