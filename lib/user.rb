@@ -172,12 +172,18 @@ class User
 
   def update_possible_ships # this belongs in board
     # reset @possible_chip counter in all cells
+    @cells.values.each{|cell| cell.possible_ships = 0}
     # loop through all cells
-    # loops through all ships
-    # generate all possible arrangements per ship per starting cell
-    # check validity, return valid placements
-    # for each valid placement, update cell property @possible_ships by 1.
+    @cells.values.each do |cell|
+      # loops through all ships
+      ships.
+      # generate all possible arrangements per ship per starting cell
+      # check validity, return valid placements
+      # for each valid placement, update cell property @possible_ships by 1.
+    end
+
     # return nothing - board cells have been updated with new total probability
+
   end
 
   def find_highest # this belongs in cell
