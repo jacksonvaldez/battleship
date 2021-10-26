@@ -169,14 +169,15 @@ class Game
     print ' > '.magenta
     dimensions = gets.chomp
     dimensions = dimensions.gsub(/\s+/, "").downcase
-    if dimensions == 'default'
-      dimensions = '10x10'
-    else
       while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
         puts "Invalid Input. Example: 15 x 20".red
         puts "Hint: maximum dimension is 26. minimum dimension is 4".red
         print ' > '.magenta
         dimensions = gets.chomp
+        dimensions = dimensions.gsub(/\s+/, "").downcase
+        if dimensions == 'default'
+          dimensions = '10x10'
+        else
       end
     end
     puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green

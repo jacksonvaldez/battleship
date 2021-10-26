@@ -42,6 +42,7 @@ class HumanUser
         puts "Put 'finish' when you are done.".light_black.bold
         puts "Example: ShipName A1 A2 A3".light_black.italic
         print ' > '.magenta
+        choice = gets.chomp
 
         if choice != 'finish'
           choice = choice.split(' ')
