@@ -169,8 +169,8 @@ class User
     end
   end
 
-  def update_possible_ships(board, ships) # this belongs in board
-    # reset @possible_chip counter in all cells
+  def update_possible_ships(board, ships)
+    # reset @possible_ship counter in all cells
     board.cells.values.each{|cell| cell.possible_ships = 0}
     # loop through all cells
     board.cells.values.each do |cell|
@@ -187,7 +187,7 @@ class User
         # check validity, return valid placements.
         # NOTE: right now this knows where existing ships are.
         # How do we check validity while only looking at hit or miss?
-        valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
+        valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement, true)}
 
         # if valid placements exist update possible_ships, otherwise move on
         if valid_placements.length > 0
