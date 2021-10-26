@@ -109,7 +109,7 @@ class Game
   def end_game
     if (@computer_user.board == nil) || (@human_user.board == nil)
       loser = "No one"
-      puts "Board failed to set up. Try using a larger board or fewer ships."
+      puts "Board failed to set up. Try using a larger board or fewer ships.".red
       # put something here to stop the rest of game.start_game.
     elsif @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'Steve'
@@ -118,7 +118,7 @@ class Game
     else
       loser = "No one"
     end
-    puts "#{loser} loses after #{turn_counter} turns!"
+    puts "#{loser} loses after #{turn_counter} turns!".red
   end
 
   def self.starter_message
