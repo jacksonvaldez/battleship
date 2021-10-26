@@ -194,7 +194,7 @@ class User
             # loop through each coordinate to gather each cell in the valid placement
             valid_placement.each do |coordinate|
               # get cell at coordiante and increase the possible_ships counter of that cell by one
-              @board.cells[coordinate].possible_ships += 1
+              board.cells[coordinate].possible_ships += 1
             end
           end
         end

@@ -71,7 +71,7 @@ describe User do
       expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 2 4 4 4 \nB 0 0 0 4 \nC 3 5 5 6 \nD 3 5 5 4 \n")
     end
   end
-
+  
   describe 'hunt' do
     it 'returns coordinate for a cell under "random" mode.' do
       expect(@steve.hunt(@steve.board, @default_ships,"random")).to be_a(String)
