@@ -57,9 +57,21 @@ describe User do
       @steve.update_possible_ships
       expect(@steve.board.cells.values.map { |cell| cell.possible_ships}.sum).to eq(192)
     end
-    xit 'updates the count of all possible ship placements per cell' do
-      @steve.board.place(@ships[0], ['A1', 'A2', 'A3'])
+    it 'updates the count of all possible ship placements per cell' do
+      @steve.board.place(@default_ships[0], ['A1', 'A2', 'A3'])
+      @steve.update_possible_ships
+      expect(@steve.board.cells.values.map { |cell| cell.possible_ships}.sum).to eq(138)
     end
   end
 
+  describe 'hunt' do
+    it 'returns coordinate for a cell under "random" mode.' do
+      expect(@steve.hunt("random")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt("random")]).to be_a(Cell)
+    end
+    it 'returns coordinate for a cell under "probability" mode.' do
+      expect(@steve.hunt("probability")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt("probability")]).to be_a(Cell)
+    end
+  end
 end

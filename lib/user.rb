@@ -154,18 +154,18 @@ class User
     end
   end
 
-  def hunt(mode) #returns chosen cell
+  def hunt(mode) #returns chosen cell coordinate
     if mode == "random"
       unfired_cells = self.board.cells.values.find_all {|cell| cell.fired_upon? == false}
-      chosen_cell = unfired_cells.sample
+      chosen_coordinate = unfired_cells.sample.coordinate
     elsif mode == "probability"
-      # reset @possible_chip counter in all cells
-      # loop through all cells
-      # loops through all ships
-      # generate all possible arrangements per ship per starting cell
-      # check validity, return valid placements
-      # for each valid placement, update cell property @possible_ships by 1.
-      # find highest value. If multiple select randomly. return chosen cell.
+      self.update_possible_ships
+      # find most highest # of ships
+      max = @board.cells.values.map{|cell| cell.possible_ships}.max
+      # gather all cells with this value
+      possible_targets = @board.cells.values.find_all{|cell| cell.possible_ships == max}
+      # randomly select from possible target
+      chosen_coordinate = possible_targets.sample(1)[0].coordinate
     end
   end
 
@@ -199,9 +199,5 @@ class User
 
     # return nothing - board cells have been updated with new total probability
 
-  end
-
-  def find_highest # this belongs in cell
-    # find highest value. If multiple select randomly. return chosen cell.
   end
 end
