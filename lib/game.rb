@@ -1,6 +1,5 @@
 require './lib/board'
-require './lib/computer_user'
-require './lib/human_user'
+require './lib/user'
 require 'colorize' # gem install colorize in terminal if needed
 
 
@@ -12,8 +11,8 @@ class Game
 
   def initialize(dimensions, ships)
     ships_2 = ships.map(&:clone)
-    @computer_user = ComputerUser.new(Board.new(dimensions[0], dimensions[1]), ships)
-    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships_2)
+    @computer_user = User.new(Board.new(dimensions[0], dimensions[1]), ships)
+    @human_user = User.new(Board.new(dimensions[0], dimensions[1]), ships_2)
     @turn_counter = 0
   end
 
@@ -53,8 +52,8 @@ class Game
 
 
   def setup_boards
-    @computer_user.setup_board
-    @human_user.setup_board
+    @computer_user.setup_board(true)
+    @human_user.setup_board(false)
   end
 
 
@@ -109,7 +108,7 @@ class Game
   def end_game
     if (@computer_user.board == nil) || (@human_user.board == nil)
       loser = "No one"
-      puts "Board failed to set up. Try using a larger board or fewer ships."
+      puts "Board failed to set up. Try using a larger board or fewer ships.".red
       # put something here to stop the rest of game.start_game.
     elsif @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       loser = 'Steve'
@@ -118,7 +117,7 @@ class Game
     else
       loser = "No one"
     end
-    puts "#{loser} loses after #{turn_counter} turns!"
+    puts "#{loser} loses after #{turn_counter} turns!".red
   end
 
   def self.starter_message
@@ -169,14 +168,15 @@ class Game
     print ' > '.magenta
     dimensions = gets.chomp
     dimensions = dimensions.gsub(/\s+/, "").downcase
-    if dimensions == 'default'
-      dimensions = '10x10'
-    else
       while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
         puts "Invalid Input. Example: 15 x 20".red
         puts "Hint: maximum dimension is 26. minimum dimension is 4".red
         print ' > '.magenta
         dimensions = gets.chomp
+        dimensions = dimensions.gsub(/\s+/, "").downcase
+        if dimensions == 'default'
+          dimensions = '10x10'
+        else
       end
     end
     puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green

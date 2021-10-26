@@ -1,4 +1,7 @@
-class HumanUser
+require './lib/board'
+require 'colorize' # gem install colorize in terminal if needed
+
+class User
 
   attr_reader :board, :ships
 
@@ -7,7 +10,30 @@ class HumanUser
     @ships = ships
   end
 
-  def setup_board
+
+  def setup_board(ai)
+    if ai
+      ai_setup_board
+    else
+      human_setup_board
+    end
+  end
+
+  def ai_setup_board
+    failed = false
+    @ships.each do |ship|
+      # randomly choose placement
+      chosen_placement = random_placement(ship)
+      #place ship
+      if !(chosen_placement == nil)
+        @board.place(ship,chosen_placement)
+      else
+        return @board = nil
+      end
+    end
+  end
+
+  def human_setup_board
     loop = true
     message = nil
     puts "\nIf you want your ships randomly placed for you, please enter 'random'.".light_black.bold
@@ -42,6 +68,7 @@ class HumanUser
         puts "Put 'finish' when you are done.".light_black.bold
         puts "Example: ShipName A1 A2 A3".light_black.italic
         print ' > '.magenta
+        choice = gets.chomp
 
         if choice != 'finish'
           choice = choice.split(' ')
@@ -62,7 +89,6 @@ class HumanUser
       end
     end
   end
-
 
   def random_placement(ship)
     # randomly choose starting cell.

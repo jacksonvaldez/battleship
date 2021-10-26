@@ -1,36 +1,37 @@
-require './lib/computer_user'
+require './lib/user'
 
 
 
-describe ComputerUser do
+describe User do
 
   before(:each) do
     @default_ships = [Ship.new("Cruiser", 3), Ship.new("Submarine", 2)]
     @width = 4
     @height = 4
     dimensions = [@width, @length]
-    #@game = Game.new([@width, @height],@default_ships)
-    @steve = ComputerUser.new(Board.new(@height, @width), @default_ships)
+    @steve = User.new(Board.new(@height, @width), @default_ships)
   end
 
   it 'exists' do
-    expect(@steve).to be_a(ComputerUser)
+    expect(@steve).to be_a(User)
   end
   it 'has attributes' do
-    expect(@steve.ships).to eq(@default_ships)
     expect(@steve.board).to be_a(Board)
+    expect(@steve.ships).to be_a(Array)
+    expect(@steve.ships[0]).to be_a(Ship)
+    expect(@steve.ships).to eq(@default_ships)
     expect(@steve.board.width).to eq(@width)
     expect(@steve.board.height).to eq(@height)
   end
 
-  describe ' #setup_board' do
+  describe ' #setup_board(ai)' do
     it 'places all ships' do
-      @steve.setup_board
+      @steve.setup_board(true)
       expect(@steve.board.cells.values.find_all{|cell| cell.empty?}.length).to eq(16 - 5)
     end
     it 'returns nil if setup failed' do
-      @bad_steve = ComputerUser.new(Board.new(2, 2), @default_ships)
-      @bad_steve.setup_board
+      @bad_steve = User.new(Board.new(2, 2), @default_ships)
+      @bad_steve.setup_board(true)
       expect(@bad_steve.board).to eq(nil)
     end
   end
