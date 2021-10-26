@@ -51,4 +51,15 @@ describe User do
     end
   end
 
+  describe 'update_possible_ships' do
+    it 'returns the count of all possible ships placements per cell' do
+      expect(@board.cells.values.map { |cell| cell.possible_ships}.sum).to eq(0)
+      update_possible_ships
+      expect(@board.cells.values.map { |cell| cell.possible_ships}.sum).to be > 0
+    end
+    it 'updates the count of all possible ship placements per cell' do
+      @board.place(@ships[0], ['A1', 'A2', 'A3'])
+    end
+  end
+
 end
