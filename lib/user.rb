@@ -165,29 +165,28 @@ class User
       # generate all possible arrangements per ship per starting cell
       # check validity, return valid placements
       # for each valid placement, update cell property @possible_ships by 1.
-      # return nothing - board cells have been updated with new total probability
       # find highest value. If multiple select randomly. return chosen cell.
     end
   end
 
   def update_possible_ships # this belongs in board
     # reset @possible_chip counter in all cells
-    @cells.values.each{|cell| cell.possible_ships = 0}
+    @board.cells.values.each{|cell| cell.possible_ships = 0}
     # loop through all cells
-    @cells.values.each do |cell|
+    @board.cells.values.each do |cell|
       # loops through all ships
       @ships.each do |ship|
         # generate all possible arrangements per ship per starting cell
         possible_placements = []
         valid_placements = []
-        possible_placements << self.create_cell_array(start_cell.coordinate, ship.length, "up")
-        possible_placements << self.create_cell_array(start_cell.coordinate, ship.length, "down")
-        possible_placements << self.create_cell_array(start_cell.coordinate, ship.length, "left")
-        possible_placements << self.create_cell_array(start_cell.coordinate, ship.length, "right")
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "up")
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "down")
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "left")
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "right")
         # check validity, return valid placements
         valid_placements = possible_placements.find_all{|placement| @board.valid_placement?(ship, placement)}
         # loop through each valid placement
-        valid_placements.each do |valid_palement|
+        valid_placements.each do |valid_placement|
           # loop through each coordinate to gather each cell in the valid placement
           valid_placement.each do |coordinate|
             # get cell at coordiante and increase the possible_ships counter of that cell by one
