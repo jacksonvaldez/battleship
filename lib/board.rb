@@ -38,8 +38,21 @@ class Board
 
   # Tests if a coordinate is a valid placement on the board
   # Return true only if both coordinate valid and cell empty
-  def valid_coordinate?(coordinate)
-    @cells.keys.include?(coordinate) && @cells[coordinate].empty?
+  # If opponent board, ignore the cell empty test. Opponent cannot see ships they have not shot at.
+  def valid_coordinate?(coordinate, opponent_board = false)
+    if !opponent_board
+      # coordinate is valid if it exists and has no ship in it
+      return @cells.keys.include?(coordinate) && @cells[coordinate].empty?
+    else
+      # when checking opponents board, coordinate is valid if it exists and renders as either a "." or a "H"
+      # only run if cell is valid
+      if @cells.keys.include?(coordinate)
+        cell_status = @cells[coordinate].render
+        return @cells.keys.include?(coordinate) && (cell_status == "." || cell_status == "H".blue.bold)
+      else
+        return false
+      end
+    end
   end
 
   def valid_fire?(coordinate)
@@ -48,7 +61,8 @@ class Board
 
 
   # Tests if a ship placement is possible on the board
-  def valid_placement?(ship, coordinates)
+  # If testing an opponents_board, ignore the unseen placement of ships.
+  def valid_placement?(ship, coordinates, opponent_board = false)
 
     def parse_letters(strings)
       strings.map do |element|
@@ -67,7 +81,7 @@ class Board
     end
 
     coordinates.each do |coordinate| # Testing if the coordinates given are a valid position on the board
-      if !self.valid_coordinate?(coordinate)
+      if !self.valid_coordinate?(coordinate, opponent_board)
         return false
       end
     end
@@ -81,7 +95,6 @@ class Board
     end
 
   end
-
 
   # place ship
   def place(ship, coordinates)
