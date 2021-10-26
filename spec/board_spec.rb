@@ -90,6 +90,15 @@ describe Board do
 
   end
 
+  describe ' #render_probability_map' do
+    it 'returns correct string' do
+      expect(@board.render_probability_map).to be_a(String)
+    end
+    it 'returns correct string' do
+      expect(@board.render_probability_map).to eq("  1 2 3 4 5 \n               \nA 0 0 0 0 0 \nB 0 0 0 0 0 \nC 0 0 0 0 0 \n")
+    end
+  end
+
   describe ' #fits?' do
     it 'returns true if ship fits' do
       board1 = Board.new(3,3)
