@@ -184,7 +184,9 @@ class User
         # Left from one cell becomes right from another cell, duplicating true placements.
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "down")
         possible_placements << self.create_cell_array(cell.coordinate, ship.length, "right")
-        # check validity, return valid placements
+        # check validity, return valid placements.
+        # NOTE: right now this knows where existing ships are.
+        # How do we check validity while only looking at hit or miss?
         valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement)}
 
         # if valid placements exist update possible_ships, otherwise move on
