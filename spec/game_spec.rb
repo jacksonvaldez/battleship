@@ -13,8 +13,8 @@ describe Game do
   end
   it 'has attributes' do
     expect(@game.turn_counter).to eq(0)
-    expect(@game.computer_user).to be_a(ComputerUser)
-    expect(@game.human_user).to be_a(HumanUser)
+    expect(@game.computer_user).to be_a(User)
+    expect(@game.human_user).to be_a(User)
   end
 
   describe '#self.starter_message' do

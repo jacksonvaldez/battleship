@@ -1,6 +1,5 @@
 require './lib/board'
-require './lib/computer_user'
-require './lib/human_user'
+require './lib/user'
 require 'colorize' # gem install colorize in terminal if needed
 
 
@@ -12,8 +11,8 @@ class Game
 
   def initialize(dimensions, ships)
     ships_2 = ships.map(&:clone)
-    @computer_user = ComputerUser.new(Board.new(dimensions[0], dimensions[1]), ships)
-    @human_user = HumanUser.new(Board.new(dimensions[0], dimensions[1]), ships_2)
+    @computer_user = User.new(Board.new(dimensions[0], dimensions[1]), ships)
+    @human_user = User.new(Board.new(dimensions[0], dimensions[1]), ships_2)
     @turn_counter = 0
   end
 
@@ -53,8 +52,8 @@ class Game
 
 
   def setup_boards
-    @computer_user.setup_board
-    @human_user.setup_board
+    @computer_user.setup_board(true)
+    @human_user.setup_board(false)
   end
 
 
