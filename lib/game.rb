@@ -65,7 +65,6 @@ class Game
         puts @computer_user.board.render(false)
         puts "\nYOUR BOARD:".red.bold
         puts @human_user.board.render(true)
-        #puts @human_user.board.render_probability_map()
         puts message_1
         puts message_2
         puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
@@ -76,6 +75,10 @@ class Game
         choice = choice.upcase
         if choice == 'END'
           break
+        elsif choice == 'HUNT'
+          puts "\nSTEVE'S PROBABILITY MAP:".red.bold
+          @computer_user.update_possible_ships(@human_user.board, @human_user.ships)
+          puts @human_user.board.render_probability_map()
         end
         if @computer_user.board.valid_fire?(choice)
           @computer_user.board.cells[choice].fire_upon
@@ -120,7 +123,7 @@ class Game
       end_message = "#{winner} wins after #{turn_counter} turns! What happened?".yellow.bold
     end
     puts "\nSTEVE'S BOARD:".red.bold
-    puts @computer_user.board.render(false)
+    puts @computer_user.board.render(true)
     puts "\nYOUR BOARD:".red.bold
     puts @human_user.board.render(true)
     puts "..........GAME OVER..........".red.bold
