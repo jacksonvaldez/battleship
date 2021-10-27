@@ -69,10 +69,15 @@ class User
         puts "Example: ShipName A1 A2 A3".light_black.italic
         print ' > '.magenta
         choice = gets.chomp
+        # upcase ship name and coordinates
+        choice = choice.upcase
 
-        if choice != 'finish'
+        if choice != 'FINISH'
+          # split user input into ship name and coordinates
           choice = choice.split(' ')
-          ship_choice = unplaced_ships.find{|ship| ship.name == choice[0].to_s }
+          # ship choice = the first chunk. Find chosen ship within unplaced ship array
+          ship_choice = unplaced_ships.find{|ship| ship.name.upcase == choice[0].to_s }
+          # assign coordiantes to the other chunks input by user
           coordinates = choice[1..].to_a
           coordinates = coordinates.find_all{|coordinate| @board.valid_coordinate?(coordinate)}
           if ship_choice.class == Ship && @board.valid_placement?(ship_choice, coordinates) && coordinates.length >= 2
@@ -154,4 +159,59 @@ class User
     end
   end
 
+  def hunt(board, ships, mode) #returns chosen cell coordinate
+    if mode == "random"
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
+      chosen_coordinate = unfired_cells.sample.coordinate
+    elsif mode == "probability"
+      self.update_possible_ships(board, ships)
+      # remove cells that have already been fired at.
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
+      # find most highest # of ships
+      max = unfired_cells.map{|cell| cell.possible_ships}.max
+      # gather all cells with this value
+      possible_targets = unfired_cells.find_all{|cell| cell.possible_ships == max}
+      # randomly select from possible target
+      chosen_coordinate = possible_targets.sample(1)[0].coordinate
+    end
+  end
+
+  def update_possible_ships(board, ships)
+    # reset @possible_ship counter in all cells
+    board.cells.values.each{|cell| cell.possible_ships = 0}
+    # loop through all cells
+    board.cells.values.each do |cell|
+      # loops through all unsunken ships
+      unsunken_ships = ships.find_all{|ship| !(ship.sunk?)}
+      unsunken_ships.each do |ship|
+        # generate all possible arrangements per ship per starting cell
+        possible_placements = []
+        valid_placements = []
+        #only down and right are needed, not up and left, because we are testing every cell.
+        # Left from one cell becomes right from another cell, duplicating true placements.
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "down")
+        possible_placements << self.create_cell_array(cell.coordinate, ship.length, "right")
+        # check validity, return valid placements.
+        # NOTE: right now this knows where existing ships are.
+        # How do we check validity while only looking at hit or miss?
+        valid_placements = possible_placements.find_all{|placement| board.valid_placement?(ship, placement, true)}
+
+        # if valid placements exist update possible_ships, otherwise move on
+        if valid_placements.length > 0
+          # loop through each valid placement
+          valid_placements.each do |valid_placement|
+            # loop through each coordinate to gather each cell in the valid placement
+            valid_placement.each do |coordinate|
+              # get cell at coordiante and increase the possible_ships counter of that cell by one
+              board.cells[coordinate].possible_ships += 1
+            end
+          end
+        end
+      end
+
+    end
+
+    # return nothing - board cells have been updated with new total probability
+
+  end
 end

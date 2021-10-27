@@ -51,4 +51,41 @@ describe User do
     end
   end
 
+  describe 'update_possible_ships' do
+    it 'returns the count of all possible ships placements per cell' do
+      expect(@steve.board.cells.values.map { |cell| cell.possible_ships}.sum).to eq(0)
+      @steve.update_possible_ships(@steve.board, @default_ships)
+      expect(@steve.board.cells.values.map { |cell| cell.possible_ships}.sum).to eq(96)
+    end
+    it 'updates probability map correctly under "probability" mode' do
+      expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 0 0 0 0 \nB 0 0 0 0 \nC 0 0 0 0 \nD 0 0 0 0 \n")
+      @steve.update_possible_ships(@steve.board, @default_ships)
+      expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 4 6 6 4 \nB 6 8 8 6 \nC 6 8 8 6 \nD 4 6 6 4 \n")
+      @steve.board.place(@default_ships[0], ['B1', 'B2', 'B3'])
+      @steve.update_possible_ships(@steve.board, @default_ships)
+      expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 4 6 6 4 \nB 6 8 8 6 \nC 6 8 8 6 \nD 4 6 6 4 \n")
+      @steve.board.cells['B2'].fire_upon
+      expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 4 6 6 4 \nB 6 8 8 6 \nC 6 8 8 6 \nD 4 6 6 4 \n")
+      @steve.board.cells['C2'].fire_upon
+      expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 4 6 6 4 \nB 6 8 8 6 \nC 6 8 8 6 \nD 4 6 6 4 \n")
+    end
+  end
+
+  describe 'hunt' do
+    it 'returns coordinate for a cell under "random" mode.' do
+      expect(@steve.hunt(@steve.board, @default_ships,"random")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"random")]).to be_a(Cell)
+    end
+    it 'returns coordinate for a cell under "probability" mode.' do
+      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"probability")]).to be_a(Cell)
+    end
+    it 'returns a coordinate that has not been fired upon' do
+      cells = @steve.board.cells.values
+      safe_cell = cells.pop
+      cells.each{|cell| cell.fire_upon}
+      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to eq(safe_cell.coordinate)
+    end
+
+  end
 end
