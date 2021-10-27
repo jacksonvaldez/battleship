@@ -69,10 +69,15 @@ class User
         puts "Example: ShipName A1 A2 A3".light_black.italic
         print ' > '.magenta
         choice = gets.chomp
+        # upcase ship name and coordinates
+        choice = choice.upcase
 
-        if choice != 'finish'
+        if choice != 'FINISH'
+          # split user input into ship name and coordinates
           choice = choice.split(' ')
-          ship_choice = unplaced_ships.find{|ship| ship.name == choice[0].to_s }
+          # ship choice = the first chunk. Find chosen ship within unplaced ship array
+          ship_choice = unplaced_ships.find{|ship| ship.name.upcase == choice[0].to_s }
+          # assign coordiantes to the other chunks input by user
           coordinates = choice[1..].to_a
           coordinates = coordinates.find_all{|coordinate| @board.valid_coordinate?(coordinate)}
           if ship_choice.class == Ship && @board.valid_placement?(ship_choice, coordinates) && coordinates.length >= 2

@@ -61,6 +61,7 @@ class Game
     message_2 = nil
     until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
       if @turn_counter.even? || @turn_counter == 0 # If its the players turn
+        puts "\n\n...... ROUND ##{@turn_counter/2} ......\n".yellow.bold
         puts "\nSTEVE'S BOARD:".red.bold
         puts @computer_user.board.render(false)
         puts "\nYOUR BOARD:".red.bold
@@ -122,11 +123,11 @@ class Game
       winner = "No one"
       end_message = "#{winner} wins after #{turn_counter} turns! What happened?".yellow.bold
     end
-    puts "\nSTEVE'S BOARD:".red.bold
+    puts "\n\n..........GAME OVER..........\n".yellow.bold
+    puts "\nSTEVE'S FINAL BOARD:".red.bold
     puts @computer_user.board.render(true)
-    puts "\nYOUR BOARD:".red.bold
+    puts "\nYOUR FINAL BOARD:\n".red.bold
     puts @human_user.board.render(true)
-    puts "..........GAME OVER..........".red.bold
     puts end_message
   end
 
@@ -176,7 +177,7 @@ class Game
     print ' > '.magenta
     dimensions = gets.chomp
     dimensions = dimensions.gsub(/\s+/, "").downcase
-      while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
+      while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split('x')[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
         if dimensions == 'default'
           dimensions = '10x10'
         else
@@ -216,6 +217,7 @@ class Game
       end
     end
     puts "Great! You have created #{ship_objects.length} ships!".green
+    ship_objects.each{|ship| puts " * #{ship.name}: #{ship.length}".green}
     ship_objects
   end
 end
