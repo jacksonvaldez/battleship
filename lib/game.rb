@@ -37,6 +37,7 @@ class Game
     game.setup_boards
     if (game.computer_user.board == nil) || (game.human_user.board == nil)
       game.end_game
+      return nil
     end
 
     # STAGE 4: Game asks the user and Steve to take turns back and forth until someone has no more ships
