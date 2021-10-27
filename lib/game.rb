@@ -130,7 +130,7 @@ class Game
     puts "\n\n..........GAME OVER..........\n".yellow.bold
     puts "\nSTEVE'S FINAL BOARD:".red.bold
     puts @computer_user.board.render(true)
-    puts "\nYOUR FINAL BOARD:\n".red.bold
+    puts "\nYOUR FINAL BOARD:".red.bold
     puts @human_user.board.render(true)
     puts end_message
   end
