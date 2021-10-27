@@ -167,7 +167,7 @@ class Game
 
   def self.get_dimensions # Game asks the user to input dimensions through the command line. If successful, it will return an array with 2 elements: [height, width]
     puts "\n"
-    puts "Please choose the board dimensions (rows x columns), or type 'default' for standard Battleship board size.".light_black.bold
+    puts "Please choose the board dimensions (columns x rows), or type 'default' for standard Battleship board size.".light_black.bold
     puts "Example: 15 x 20".light_black.italic
     puts "Example: default".light_black.italic
     print ' > '.magenta
@@ -184,7 +184,7 @@ class Game
         dimensions = dimensions.gsub(/\s+/, "").downcase
       end
     end
-    puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green
+    puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} columns and #{dimensions.split('x')[1].to_i} rows".green
     [dimensions.split('x')[0].to_i, dimensions.split('x')[1].to_i]
   end
 
