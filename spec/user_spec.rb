@@ -24,6 +24,37 @@ describe User do
     expect(@steve.board.height).to eq(@height)
   end
 
+  describe '#hunt' do
+    it 'returns coordinate for a cell under "random" mode.' do
+      expect(@steve.hunt(@steve.board, @default_ships,"random")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"random")]).to be_a(Cell)
+    end
+    it 'returns coordinate for a cell under "probability" mode.' do
+      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to be_a(String)
+      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"probability")]).to be_a(Cell)
+    end
+    it 'returns a coordinate that has not been fired upon' do
+      cells = @steve.board.cells.values
+      safe_cell = cells.pop
+      cells.each{|cell| cell.fire_upon}
+      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to eq(safe_cell.coordinate)
+    end
+  end
+
+  describe '#target' do
+    it 'returns coordinate for a cell.' do
+      expect(@steve.target(@steve.board, @default_ships)).to be_a(String)
+      expect(@steve.board.cells[@steve.target(@steve.board, @default_ships)]).to be_a(Cell)
+    end
+    it 'returns a coordinate that has not been fired upon' do
+      @steve.board.place(@default_ships[1], ['D3', 'D4'])
+      cells = @steve.board.cells.values
+      safe_cell = cells.pop
+      cells.each{|cell| cell.fire_upon}
+      expect(@steve.target(@steve.board, @default_ships)).to eq(safe_cell.coordinate)
+    end
+  end
+
   describe ' #setup_board(ai)' do
     it 'places all ships' do
       @steve.setup_board(true)
@@ -69,23 +100,5 @@ describe User do
       @steve.board.cells['C2'].fire_upon
       expect(@steve.board.render_probability_map).to eq("  1 2 3 4 \n              \nA 4 6 6 4 \nB 6 8 8 6 \nC 6 8 8 6 \nD 4 6 6 4 \n")
     end
-  end
-
-  describe 'hunt' do
-    it 'returns coordinate for a cell under "random" mode.' do
-      expect(@steve.hunt(@steve.board, @default_ships,"random")).to be_a(String)
-      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"random")]).to be_a(Cell)
-    end
-    it 'returns coordinate for a cell under "probability" mode.' do
-      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to be_a(String)
-      expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"probability")]).to be_a(Cell)
-    end
-    it 'returns a coordinate that has not been fired upon' do
-      cells = @steve.board.cells.values
-      safe_cell = cells.pop
-      cells.each{|cell| cell.fire_upon}
-      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to eq(safe_cell.coordinate)
-    end
-
   end
 end

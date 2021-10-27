@@ -10,6 +10,45 @@ class User
     @ships = ships
   end
 
+  def hunt(board, ships, mode) #returns chosen cell coordinate
+    if mode == "random"
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
+      chosen_coordinate = unfired_cells.sample.coordinate
+    elsif mode == "probability"
+      self.update_possible_ships(board, ships)
+      # remove cells that have already been fired at.
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
+      # find most highest # of ships
+      max = unfired_cells.map{|cell| cell.possible_ships}.max
+      # gather all cells with this value
+      possible_targets = unfired_cells.find_all{|cell| cell.possible_ships == max}
+      # randomly select from possible target
+      chosen_coordinate = possible_targets.sample(1)[0].coordinate
+    end
+  end
+
+  def target(opponent_board, opponent_ships)
+
+    # First, find all hit coordinates that are not sunk
+    hit_cells = opponent_board.cells.values.find_all { |cell| cell.render == "H".blue.bold }
+    hit_coordinates = hit_cells.map { |cell| cell.coordinate }
+
+    # Find all coordinates adjacent to hits, and haven't been fired upon
+    adjacent_coordinates = []
+    hit_coordinates.each do |coordinate|
+      adjacent_coordinates << create_cell_array(coordinate, 2, 'up')[1]
+      adjacent_coordinates << create_cell_array(coordinate, 2, 'down')[1]
+      adjacent_coordinates << create_cell_array(coordinate, 2, 'left')[1]
+      adjacent_coordinates << create_cell_array(coordinate, 2, 'right')[1]
+    end
+    adjacent_coordinates = adjacent_coordinates.find_all { |coordinate2| opponent_board.valid_fire?(coordinate2) }
+    adjacent_coordinates.uniq!
+
+    # randomly choose one of those
+    return adjacent_coordinates.sample
+
+  end
+
 
   def setup_board(ai)
     if ai
@@ -159,23 +198,6 @@ class User
     end
   end
 
-  def hunt(board, ships, mode) #returns chosen cell coordinate
-    if mode == "random"
-      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
-      chosen_coordinate = unfired_cells.sample.coordinate
-    elsif mode == "probability"
-      self.update_possible_ships(board, ships)
-      # remove cells that have already been fired at.
-      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
-      # find most highest # of ships
-      max = unfired_cells.map{|cell| cell.possible_ships}.max
-      # gather all cells with this value
-      possible_targets = unfired_cells.find_all{|cell| cell.possible_ships == max}
-      # randomly select from possible target
-      chosen_coordinate = possible_targets.sample(1)[0].coordinate
-    end
-  end
-
   def update_possible_ships(board, ships)
     # reset @possible_ship counter in all cells
     board.cells.values.each{|cell| cell.possible_ships = 0}
@@ -208,10 +230,7 @@ class User
           end
         end
       end
-
     end
-
     # return nothing - board cells have been updated with new total probability
-
   end
 end
