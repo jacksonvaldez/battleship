@@ -105,17 +105,26 @@ class Game
 
   def end_game # Ends the game
     if (@computer_user.board == nil) || (@human_user.board == nil)
-      loser = "No one"
-      puts "Board failed to set up. Try using a larger board or fewer ships.".red
-      # put something here to stop the rest of game.start_game.
+      winner = "No one"
+      puts "..........ERROR..........".red.bold
+      puts "Board failed to set up. Try using a larger board or fewer ships.".red.bold
+      return nil
     elsif @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
-      loser = 'Steve'
+      winner = 'You'
+      end_message = "#{winner} win after #{turn_counter} turns!".green.bold
     elsif @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
-      loser = 'You'
+      winner = 'Steve'
+      end_message = "#{winner} wins after #{turn_counter} turns! Better luck next time.".yellow.bold
     else
-      loser = "No one"
+      winner = "No one"
+      end_message = "#{winner} wins after #{turn_counter} turns! What happened?".yellow.bold
     end
-    puts "#{loser} loses after #{turn_counter} turns!".red
+    puts "\nSTEVE'S BOARD:".red.bold
+    puts @computer_user.board.render(false)
+    puts "\nYOUR BOARD:".red.bold
+    puts @human_user.board.render(true)
+    puts "..........GAME OVER..........".red.bold
+    puts end_message
   end
 
   def self.starter_message # Returns a string that can be printed as a starter message to the terminal
