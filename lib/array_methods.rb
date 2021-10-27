@@ -14,9 +14,6 @@ class Array # Adding custom methods to the array class.
     if array[0].to_i > 0
       array = array.map { |e| e.to_i }
     end
-    if array[0].to_i == 0
-      array = array.sort!
-    end
     array.sort!
     (array.first..array.last).to_a == array
   end
