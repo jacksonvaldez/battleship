@@ -44,21 +44,18 @@ class Game
 
     # STAGE 5: Game ends itself and announces the winner
     game.end_game
-
-
-
   end
 
 
 
-  def setup_boards
+  def setup_boards # Game asks the computer user and the human to setup their boards.
     @computer_user.setup_board(true)
     @human_user.setup_board(false)
   end
 
 
 
-  def alternate_turns
+  def alternate_turns # Computer and user take turns back and forth until someone's ships are sunk
     message_1 = nil
     message_2 = nil
     until @computer_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0 || @human_user.board.cells.values.count { |cell| cell.ship.class == Ship && cell.ship.sunk? == false } == 0
@@ -76,7 +73,7 @@ class Game
         choice = gets.chomp
         choice.delete!(' ')
         choice = choice.upcase
-        if choice == 'end'
+        if choice == 'END'
           break
         end
         if @computer_user.board.valid_fire?(choice)
@@ -105,7 +102,7 @@ class Game
     end
   end
 
-  def end_game
+  def end_game # Ends the game
     if (@computer_user.board == nil) || (@human_user.board == nil)
       loser = "No one"
       puts "Board failed to set up. Try using a larger board or fewer ships.".red
@@ -120,7 +117,7 @@ class Game
     puts "#{loser} loses after #{turn_counter} turns!".red
   end
 
-  def self.starter_message
+  def self.starter_message # Returns a string that can be printed as a starter message to the terminal
     text = File.new('./txt_files/starter_message.txt').read
     text = text.split("\n")
 
@@ -156,11 +153,9 @@ class Game
         loop = true
       end
     end
-
-
   end
 
-  def self.get_dimensions
+  def self.get_dimensions # Game asks the user to input dimensions through the command line. If successful, it will return an array with 2 elements: [height, width]
     puts "\n"
     puts "Please choose the board dimensions (rows x columns), or type 'default' for standard Battleship board size.".light_black.bold
     puts "Example: 15 x 20".light_black.italic
@@ -169,14 +164,14 @@ class Game
     dimensions = gets.chomp
     dimensions = dimensions.gsub(/\s+/, "").downcase
       while !(dimensions.split('x').length == 2 && dimensions.split('x')[0].to_i <= 26 && dimensions.split('x')[0].to_i >= 4 && dimensions.include?('x') && dimensions.split[1].to_i <= 26 && dimensions.split('x')[1].to_i >= 4)
+        if dimensions == 'default'
+          dimensions = '10x10'
+        else
         puts "Invalid Input. Example: 15 x 20".red
         puts "Hint: maximum dimension is 26. minimum dimension is 4".red
         print ' > '.magenta
         dimensions = gets.chomp
         dimensions = dimensions.gsub(/\s+/, "").downcase
-        if dimensions == 'default'
-          dimensions = '10x10'
-        else
       end
     end
     puts "Great! You will be playing on boards with #{dimensions.split('x')[0].to_i} rows and #{dimensions.split('x')[1].to_i} columns".green
@@ -184,7 +179,7 @@ class Game
   end
 
 
-  def self.get_ships(max_length)
+  def self.get_ships(max_length) #Game asks user to create custom ships in the command line. If successful, it will return an array of ship objects
     puts "\n"
     puts "Pleaser enter a list of ships and their lengths that you would like to use for this game. You can create as many as you would like.".light_black.bold
     puts "Note: Based on the dimensions you have given, the maximum ship length is #{max_length}".light_black.bold
@@ -210,5 +205,4 @@ class Game
     puts "Great! You have created #{ship_objects.length} ships!".green
     ship_objects
   end
-
 end
