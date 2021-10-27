@@ -47,6 +47,14 @@ class User
     adjacent_coordinates = adjacent_coordinates.find_all { |coordinate| opponent_board.valid_fire?(coordinate) }
     adjacent_coordinates.uniq!
 
+    # create all possible arrays at all hit locations
+    # check if which arrays contain only hit hit_cells
+    # choose longest array(s)
+    # randomly select target array from possible arrays
+    # identify end cells to possibly target
+    # filter invalid hit_coordinates
+    # randomly choose one of end points
+
     # Use probability map to identify bast adjacent cell to target
     self.update_possible_ships(opponent_board, opponent_ships)
     unfired_cells = adjacent_coordinates.map{|coordinate| opponent_board.cells[coordinate]}
