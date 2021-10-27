@@ -99,7 +99,11 @@ class Game
           message_1 = "Invalid Input! You either already fired here or the given coordinate does not exist.".red
         end
       else # If its not the players turn, then its the computers turn
-        chosen_coordinate = @computer_user.hunt(@human_user.board, @human_user.ships, "probability")
+        if @human_user.board.cells.values.find_all { |cell| cell.render == "H".blue.bold }.length > 0
+          chosen_coordinate = @computer_user.target(@human_user.board, @human_user.ships)
+        else
+          chosen_coordinate = @computer_user.hunt(@human_user.board, @human_user.ships, "probability")
+        end
         @human_user.board.cells[chosen_coordinate].fire_upon
         message_2 = "Steve has fired at cell #{chosen_coordinate} on your board!".red
         @turn_counter += 1
@@ -126,7 +130,7 @@ class Game
     puts "\n\n..........GAME OVER..........\n".yellow.bold
     puts "\nSTEVE'S FINAL BOARD:".red.bold
     puts @computer_user.board.render(true)
-    puts "\nYOUR FINAL BOARD:\n".red.bold
+    puts "\nYOUR FINAL BOARD:".red.bold
     puts @human_user.board.render(true)
     puts end_message
   end
