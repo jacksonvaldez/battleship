@@ -1,4 +1,5 @@
 require './lib/board'
+require './lib/array_methods'
 require 'colorize' # gem install colorize in terminal if needed
 
 class User
@@ -31,6 +32,8 @@ class User
 
     # First, find all hit coordinates that are not sunk
     hit_cells = opponent_board.cells.values.find_all { |cell| cell.render == "H".blue.bold }
+    # If there are no hits, end the target method.
+    return nil if hit_cells.length == 0
     hit_coordinates = hit_cells.map { |cell| cell.coordinate }
 
     # Find all coordinates adjacent to hits, and haven't been fired upon
@@ -41,11 +44,15 @@ class User
       adjacent_coordinates << create_cell_array(coordinate, 2, 'left')[1]
       adjacent_coordinates << create_cell_array(coordinate, 2, 'right')[1]
     end
-    adjacent_coordinates = adjacent_coordinates.find_all { |coordinate2| opponent_board.valid_fire?(coordinate2) }
+    adjacent_coordinates = adjacent_coordinates.find_all { |coordinate| opponent_board.valid_fire?(coordinate) }
     adjacent_coordinates.uniq!
 
-    # randomly choose one of those
-    return adjacent_coordinates.sample
+    # Use probability map to identify bast adjacent cell to target
+    self.update_possible_ships(opponent_board, opponent_ships)
+    unfired_cells = adjacent_coordinates.map{|coordinate| opponent_board.cells[coordinate]}
+    max = unfired_cells.map{|cell| cell.possible_ships}.max
+    possible_targets = unfired_cells.find_all{|cell| cell.possible_ships == max}
+    chosen_coordinate = possible_targets.sample(1)[0].coordinate
 
   end
 
