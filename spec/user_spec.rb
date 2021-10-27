@@ -43,10 +43,13 @@ describe User do
 
   describe '#target' do
     it 'returns coordinate for a cell.' do
+      expect(@steve.target(@steve.board, @default_ships)).to eq(nil)
+      @steve.board.place(@default_ships[1], ['D3', 'D4'])
+      @steve.board.cells['D3'].fire_upon
       expect(@steve.target(@steve.board, @default_ships)).to be_a(String)
       expect(@steve.board.cells[@steve.target(@steve.board, @default_ships)]).to be_a(Cell)
     end
-    it 'returns a coordinate that has not been fired upon' do
+    it 'returns a coordinate that has not been fired upon and is on the board' do
       @steve.board.place(@default_ships[1], ['D3', 'D4'])
       cells = @steve.board.cells.values
       safe_cell = cells.pop
