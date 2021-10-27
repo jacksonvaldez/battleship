@@ -80,6 +80,12 @@ describe User do
       expect(@steve.hunt(@steve.board, @default_ships,"probability")).to be_a(String)
       expect(@steve.board.cells[@steve.hunt(@steve.board, @default_ships,"probability")]).to be_a(Cell)
     end
+    it 'returns a coordinate that has not been fired upon' do
+      cells = @steve.board.cells.values
+      safe_cell = cells.pop
+      cells.each{|cell| cell.fire_upon}
+      expect(@steve.hunt(@steve.board, @default_ships,"probability")).to eq(safe_cell.coordinate)
+    end
 
   end
 end

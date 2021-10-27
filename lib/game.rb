@@ -67,6 +67,7 @@ class Game
         puts @computer_user.board.render(false)
         puts "\nYOUR BOARD:".red.bold
         puts @human_user.board.render(true)
+        #puts @human_user.board.render_probability_map()
         puts message_1
         puts message_2
         puts "It is your turn! Please choose a valid spot to fire on Steve's board. Example: A5".light_black.bold
@@ -97,7 +98,6 @@ class Game
         end
       else # If its not the players turn, then its the computers turn
         chosen_coordinate = @computer_user.hunt(@human_user.board, @human_user.ships, "probability")
-        require "pry"; binding.pry
         @human_user.board.cells[chosen_coordinate].fire_upon
         message_2 = "Steve has fired at cell #{chosen_coordinate} on your board!".red
         @turn_counter += 1

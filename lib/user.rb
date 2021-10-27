@@ -160,10 +160,12 @@ class User
       chosen_coordinate = unfired_cells.sample.coordinate
     elsif mode == "probability"
       self.update_possible_ships(board, ships)
+      # remove cells that have already been fired at.
+      unfired_cells = board.cells.values.find_all {|cell| cell.fired_upon? == false}
       # find most highest # of ships
-      max = board.cells.values.map{|cell| cell.possible_ships}.max
+      max = unfired_cells.map{|cell| cell.possible_ships}.max
       # gather all cells with this value
-      possible_targets = board.cells.values.find_all{|cell| cell.possible_ships == max}
+      possible_targets = unfired_cells.find_all{|cell| cell.possible_ships == max}
       # randomly select from possible target
       chosen_coordinate = possible_targets.sample(1)[0].coordinate
     end
