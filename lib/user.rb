@@ -40,7 +40,7 @@ class User
     vertical_hits = []
     horizontal_hits = []
     hit_coordinates.each do |coordinate_1|
-      hit_coordinates.find_all do |coordinate_2|
+      hit_coordinates.each do |coordinate_2|
         if coordinate_1[0] == coordinate_2[0] && [coordinate_1[1..], coordinate_2[1..]].is_sequential?
           horizontal_hits << coordinate_1
           horizontal_hits << coordinate_2
