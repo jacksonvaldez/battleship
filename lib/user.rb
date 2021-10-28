@@ -36,6 +36,28 @@ class User
     return nil if hit_cells.length == 0
     hit_coordinates = hit_cells.map { |cell| cell.coordinate }
 
+
+    vertical_hits = []
+    horizontal_hits = []
+    hit_coordinates.each do |coordinate_1|
+      hit_coordinates.find_all do |coordinate_2|
+        if coordinate_1[0] == coordinate_2[0] && [coordinate_1[1..], coordinate_2[1..]].is_sequential?
+          horizontal_hits << coordinate_1
+          horizontal_hits << coordinate_2
+        elsif coordinate_1[1..] == coordinate_2[1..] && [coordinate_1[0], coordinate_2[0]].is_sequential?
+          vertical_hits << coordinate_1
+          vertical_hits << coordinate_2
+        end
+      end
+    end
+    vertical_hits.uniq!
+    vertical_hits = vertical_hits.group_by {|hit| hit[1..]}
+    columns = vertical_hits.keys
+
+    horizontal_hits.uniq!
+    horizontal_hits = horizontal_hits.group_by {|hit| hit[0]}
+    rows = horizontal_hits.keys
+
     # Find all coordinates adjacent to hits, and haven't been fired upon
     adjacent_coordinates = []
     hit_coordinates.each do |coordinate|
@@ -47,13 +69,21 @@ class User
     adjacent_coordinates = adjacent_coordinates.find_all { |coordinate| opponent_board.valid_fire?(coordinate) }
     adjacent_coordinates.uniq!
 
-    # create all possible arrays at all hit locations
-    # check if which arrays contain only hit hit_cells
-    # choose longest array(s)
-    # randomly select target array from possible arrays
-    # identify end cells to possibly target
-    # filter invalid hit_coordinates
-    # randomly choose one of end points
+    adjacent_and_directional = []
+    if columns.length > 0
+      columns.each do |column|
+        adjacent_coordinates.each {|coordinate| coordinate[1..] == column ? adjacent_and_directional << coordinate : nil }
+      end
+    end
+    if rows.length > 0
+      rows.each do |row|
+        adjacent_coordinates.each {|coordinate| coordinate[0] == row ? adjacent_and_directional << coordinate : nil }
+      end
+    end
+    if adjacent_and_directional.length > 0
+      adjacent_coordinates = adjacent_and_directional
+    end
+
 
     # Use probability map to identify bast adjacent cell to target
     self.update_possible_ships(opponent_board, opponent_ships)
@@ -131,7 +161,7 @@ class User
           choice = choice.split(' ')
           # ship choice = the first chunk. Find chosen ship within unplaced ship array
           ship_choice = unplaced_ships.find{|ship| ship.name.upcase == choice[0].to_s }
-          # assign coordiantes to the other chunks input by user
+          # assign coordinates to the other chunks input by user
           coordinates = choice[1..].to_a
           coordinates = coordinates.find_all{|coordinate| @board.valid_coordinate?(coordinate)}
           if ship_choice.class == Ship && @board.valid_placement?(ship_choice, coordinates) && coordinates.length >= 2
@@ -239,7 +269,7 @@ class User
           valid_placements.each do |valid_placement|
             # loop through each coordinate to gather each cell in the valid placement
             valid_placement.each do |coordinate|
-              # get cell at coordiante and increase the possible_ships counter of that cell by one
+              # get cell at coordinate and increase the possible_ships counter of that cell by one
               board.cells[coordinate].possible_ships += 1
             end
           end
